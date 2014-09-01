@@ -1,0 +1,2 @@
+Need the table data in the folder of distribution
+Need logo small for pdf printing otherwise will get error
