@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Mon Sep 01 20:26:37 NZST 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.3.0 - (1405108): instance a816c00e-0148-3052-ad8f-000000986528 
+on database directory C:\Users\Joshua\Desktop\Project\Conveyor\johnbrooksfinal\Johnbrooksupgrade3\JohnBrooks  with class loader sun.misc.Launcher$AppClassLoader@1a7bf11 
+Loaded from file:/C:/Program%20Files%20(x86)/Java/jdk1.7.0_45/db/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_45-b18
+user.dir=C:\Users\Joshua\Desktop\Project\Conveyor\johnbrooksfinal\Johnbrooksupgrade3
+os.name=Windows 8
+os.arch=x86
+os.version=6.2
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

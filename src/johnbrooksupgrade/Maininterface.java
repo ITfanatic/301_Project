@@ -1,20 +1,18 @@
 package johnbrooksupgrade;
 
-import java.lang.Math; //brings in math class for degree to radian conversion
-import java.lang.Character; //brings in Double works when commented out
-import java.io.File; //allows file representation //prints to file
-import java.io.FileNotFoundException;
-import javax.swing.JOptionPane;
-import java.awt.Color;
+import java.awt.Color; //brings in Double works when commented out
+import java.awt.Graphics;
+import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-//importing classes for functionality
+import java.lang.Character;
+import java.lang.Math;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+//importing packages for functionality
 
 public class Maininterface extends javax.swing.JFrame
 {
@@ -73,21 +71,19 @@ public class Maininterface extends javax.swing.JFrame
     protected double Conveyorrpm33;
     protected double Rpmconveyor34;
     protected String Rpmconveyor35;
-    protected String Filename;
     private boolean isDiscreet;
     // </editor-fold>
 
     //Referencing Salesinfo class
     private final SalesInfo save;
+    //This is used so we can collect the error messages for each error and display them in one message box 
+    private ArrayList<String> errorMessages = new ArrayList<>();
 
     public Maininterface()
     {
-
         initComponents();
 
         save = new SalesInfo(this);
-        //Referencing salesinfo
-
     }
 
     @SuppressWarnings("unchecked")
@@ -124,7 +120,6 @@ public class Maininterface extends javax.swing.JFrame
         jcbMeterial = new javax.swing.JComboBox();
         Applicationfactoranswer = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        btnApplicationfactor = new javax.swing.JButton();
         Angleinput = new javax.swing.JTextField();
         Unithourinput = new javax.swing.JTextField();
         Lengthinput = new javax.swing.JTextField();
@@ -133,8 +128,6 @@ public class Maininterface extends javax.swing.JFrame
         jlunitsperhour = new javax.swing.JLabel();
         jlLengh = new javax.swing.JLabel();
         jlSpacing = new javax.swing.JLabel();
-        speedofbeltbtn = new javax.swing.JButton();
-        Loadperhourcontiniousbtn = new javax.swing.JButton();
         Loadperhourcontiniousoutput = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jlLengthMetres = new javax.swing.JLabel();
@@ -143,29 +136,40 @@ public class Maininterface extends javax.swing.JFrame
         jweightofunit = new javax.swing.JLabel();
         Weightofunitinput = new javax.swing.JTextField();
         weightofunitlabel = new javax.swing.JLabel();
-        Productonconveyorbutton = new javax.swing.JButton();
-        Rpmconveyor = new javax.swing.JButton();
-        pocError = new javax.swing.JLabel();
-        speedOfBeltError = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jBQuit = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
         Kwoutput = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
+        loadContinuousLbl = new javax.swing.JLabel();
+        powerLbl = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        rpmResultsOutput = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jBWormBox = new javax.swing.JButton();
+        jBBevelHelical = new javax.swing.JButton();
+        jBBrooksCyclo = new javax.swing.JButton();
+        jBReset = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        GearboxOptionsOutput = new javax.swing.JTextArea();
+        jLabel31 = new javax.swing.JLabel();
+        dbProcessing = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("John Brooks Ltd Conveyor Calculator");
+        setResizable(false);
 
+        Drumdiameterinput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         Drumdiameterinput.addKeyListener(new java.awt.event.KeyAdapter()
         {
             public void keyTyped(java.awt.event.KeyEvent evt)
@@ -174,7 +178,7 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
-        Rpminput.setEditable(false);
+        Rpminput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         Rpminput.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -190,6 +194,7 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        Lengthofconveyorinput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         Lengthofconveyorinput.addKeyListener(new java.awt.event.KeyAdapter()
         {
             public void keyTyped(java.awt.event.KeyEvent evt)
@@ -198,6 +203,9 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        Productonconveyorinput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        Productonconveyorinput.setMaximumSize(new java.awt.Dimension(6, 22));
+        Productonconveyorinput.setPreferredSize(new java.awt.Dimension(65, 22));
         Productonconveyorinput.addKeyListener(new java.awt.event.KeyAdapter()
         {
             public void keyTyped(java.awt.event.KeyEvent evt)
@@ -206,28 +214,42 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel1.setText("Product on Conveyor");
 
+        jLabel2.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel2.setText("Length of Conveyor");
 
+        jLabel3.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel3.setText("Rpm");
 
+        jLabel4.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel4.setText("Drum Diameter");
 
+        jLabel5.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel5.setText("Metres");
 
+        jLRpm.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLRpm.setText("Rpm");
 
+        jLabel7.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel7.setText("Metres");
 
+        jLabel8.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel8.setText("Kg's");
 
+        Kgsatanygiventimeoutput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+
+        jLabel9.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel9.setText("Belt Weight");
 
+        jLabel10.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel10.setText("Service Factor");
 
+        jLabel11.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel11.setText("Width of Conveyor");
 
+        Widthofconveyorinput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         Widthofconveyorinput.addKeyListener(new java.awt.event.KeyAdapter()
         {
             public void keyTyped(java.awt.event.KeyEvent evt)
@@ -236,6 +258,7 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        Beltweightinput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         Beltweightinput.addKeyListener(new java.awt.event.KeyAdapter()
         {
             public void keyTyped(java.awt.event.KeyEvent evt)
@@ -244,6 +267,7 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        Servicefactorinput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         Servicefactorinput.addKeyListener(new java.awt.event.KeyAdapter()
         {
             public void keyTyped(java.awt.event.KeyEvent evt)
@@ -252,8 +276,10 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        jLabel12.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel12.setText("Metres");
 
+        other.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         other.setText("Calculate");
         other.addActionListener(new java.awt.event.ActionListener()
         {
@@ -263,8 +289,14 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        Beltloadoutput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+
+        Nmoutput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+
+        jLabel13.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel13.setText("Conveyor Speed");
 
+        Conveyorspeedinput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         Conveyorspeedinput.addKeyListener(new java.awt.event.KeyAdapter()
         {
             public void keyTyped(java.awt.event.KeyEvent evt)
@@ -273,8 +305,10 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        jLConveyorSpeed.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLConveyorSpeed.setText("M/pm");
 
+        jcbMeterial.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jcbMeterial.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select", "Pivoting Bucket Conveyor", "Belt on Rollers", "Metal on Metal (finished)", "Fabric on Steel", "Fabric on Wood", "Leather on Wood", "Wood on Wood", "Plastic on Steel", "Metal on Wood", "Rubber on Wood", "Rubber on Steel", "Leather on Metal", "" }));
         jcbMeterial.addActionListener(new java.awt.event.ActionListener()
         {
@@ -284,17 +318,12 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        Applicationfactoranswer.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+
+        jLabel15.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel15.setText("Belt Material");
 
-        btnApplicationfactor.setText("Coeff.Friction");
-        btnApplicationfactor.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                btnApplicationfactorActionPerformed(evt);
-            }
-        });
-
+        Angleinput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         Angleinput.setText("0");
         Angleinput.addKeyListener(new java.awt.event.KeyAdapter()
         {
@@ -304,6 +333,7 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        Unithourinput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         Unithourinput.setEnabled(false);
         Unithourinput.addActionListener(new java.awt.event.ActionListener()
         {
@@ -320,6 +350,7 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        Lengthinput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         Lengthinput.setEnabled(false);
         Lengthinput.addActionListener(new java.awt.event.ActionListener()
         {
@@ -336,6 +367,7 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        Spacinginput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         Spacinginput.setEnabled(false);
         Spacinginput.addKeyListener(new java.awt.event.KeyAdapter()
         {
@@ -345,6 +377,7 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        jcdeiscret.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jcdeiscret.setText("Discreet");
         jcdeiscret.addItemListener(new java.awt.event.ItemListener()
         {
@@ -361,48 +394,39 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        jlunitsperhour.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jlunitsperhour.setText("Units/Hour");
         jlunitsperhour.setEnabled(false);
 
+        jlLengh.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jlLengh.setText("Product Length");
         jlLengh.setEnabled(false);
 
+        jlSpacing.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jlSpacing.setText("Spacing per Unit");
         jlSpacing.setEnabled(false);
 
-        speedofbeltbtn.setText("Speed of Belt");
-        speedofbeltbtn.setEnabled(false);
-        speedofbeltbtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                speedofbeltbtnActionPerformed(evt);
-            }
-        });
+        Loadperhourcontiniousoutput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
 
-        Loadperhourcontiniousbtn.setText("Load per Hour Continuous");
-        Loadperhourcontiniousbtn.setEnabled(false);
-        Loadperhourcontiniousbtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                LoadperhourcontiniousbtnActionPerformed(evt);
-            }
-        });
-
+        jLabel19.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel19.setText("Decimal");
 
+        jlLengthMetres.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jlLengthMetres.setText("Metres");
         jlLengthMetres.setEnabled(false);
 
+        jlSpacingMetress.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jlSpacingMetress.setText("Metres");
         jlSpacingMetress.setEnabled(false);
 
+        jLabel16.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel16.setText("Angle in Degrees");
 
+        jweightofunit.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jweightofunit.setText("Weight of unit");
         jweightofunit.setEnabled(false);
 
+        Weightofunitinput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         Weightofunitinput.setEnabled(false);
         Weightofunitinput.addKeyListener(new java.awt.event.KeyAdapter()
         {
@@ -412,35 +436,21 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        weightofunitlabel.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         weightofunitlabel.setText("Kg");
         weightofunitlabel.setEnabled(false);
 
-        Productonconveyorbutton.setText("Product on conveyor");
-        Productonconveyorbutton.setEnabled(false);
-        Productonconveyorbutton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                ProductonconveyorbuttonActionPerformed(evt);
-            }
-        });
-
-        Rpmconveyor.setText("Conveyor/Rpm speed");
-        Rpmconveyor.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                RpmconveyorActionPerformed(evt);
-            }
-        });
-
+        jLabel6.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel6.setText("Torque");
 
+        jLabel14.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel14.setText("Total design Load");
 
+        jLabel20.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel20.setText("Kg'f");
 
-        jButton1.setText("Save");
+        jButton1.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jButton1.setText("PDF");
         jButton1.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -449,6 +459,7 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        jBQuit.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jBQuit.setText("Quit");
         jBQuit.addActionListener(new java.awt.event.ActionListener()
         {
@@ -458,25 +469,98 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
+        jLabel17.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel17.setText("Kg/m2");
 
-        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel21.setText("Loading");
+        jLabel22.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabel22.setText("Specifications");
 
-        jLabel22.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel22.setText("Conveyor speed and load");
-
-        jLabel23.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel23.setText("Torque and power");
-
-        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/johnbrooksupgrade/John Brooks logo - New Globe - Industral automationresized.jpg"))); // NOI18N
+        jLabel18.setFont(new java.awt.Font("Verdana", 1, 11)); // NOI18N
+        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/johnbrooksupgrade/John Brooks logo.jpg"))); // NOI18N
         jLabel18.setText("jLabel18");
 
+        jLabel24.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel24.setText("Power");
 
+        jLabel25.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel25.setText("Kw");
 
+        Kwoutput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+
+        jLabel26.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel26.setText("Nm");
+
+        loadContinuousLbl.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        loadContinuousLbl.setText("Continuous Load Per Hour:");
+        loadContinuousLbl.setEnabled(false);
+
+        jLabel27.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jLabel27.setText("Coeff. Friction");
+
+        jLabel28.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabel28.setText("Results:");
+
+        jLabel29.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jLabel29.setText("RPM");
+
+        rpmResultsOutput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+
+        jLabel30.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jLabel30.setText("Rpm");
+
+        jBWormBox.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jBWormBox.setText("Brooks Drive WormBox");
+        jBWormBox.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jBWormBoxActionPerformed(evt);
+            }
+        });
+
+        jBBevelHelical.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jBBevelHelical.setText("Bevel/Helical");
+        jBBevelHelical.setToolTipText("");
+        jBBevelHelical.setActionCommand("");
+        jBBevelHelical.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jBBevelHelicalActionPerformed(evt);
+            }
+        });
+
+        jBBrooksCyclo.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jBBrooksCyclo.setText("BrooksCyclo");
+        jBBrooksCyclo.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jBBrooksCycloActionPerformed(evt);
+            }
+        });
+
+        jBReset.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jBReset.setText("Reset");
+        jBReset.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jBResetActionPerformed(evt);
+            }
+        });
+
+        GearboxOptionsOutput.setEditable(false);
+        GearboxOptionsOutput.setColumns(20);
+        GearboxOptionsOutput.setRows(5);
+        jScrollPane1.setViewportView(GearboxOptionsOutput);
+        GearboxOptionsOutput.getAccessibleContext().setAccessibleName("");
+
+        jLabel31.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabel31.setText("Gearbox Options");
+
+        dbProcessing.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        dbProcessing.setText(" ");
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -487,150 +571,153 @@ public class Maininterface extends javax.swing.JFrame
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jcdeiscret)
-                        .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jlLengh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jlSpacing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jweightofunit, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(loadContinuousLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jlunitsperhour, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(4, 4, 4)
-                                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(Kgsatanygiventimeoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(Weightofunitinput, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(Spacinginput, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(Lengthinput, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(Unithourinput, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(7, 7, 7)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jlLengthMetres, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jlSpacingMetress, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(weightofunitlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(Loadperhourcontiniousoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jcdeiscret))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel28)
+                            .addComponent(other, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(Beltweightinput, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
-                                    .addComponent(Servicefactorinput, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
-                                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jcbMeterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE))
-                                        .addGap(15, 15, 15)
-                                        .addComponent(other, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(18, 18, 18))
-                            .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(22, 22, 22))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(18, 18, 18)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(Drumdiameterinput)
+                                    .addComponent(Rpminput)
+                                    .addComponent(Conveyorspeedinput)
+                                    .addComponent(Lengthofconveyorinput)
+                                    .addComponent(Productonconveyorinput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(Widthofconveyorinput, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(153, 153, 153)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(Angleinput, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                            .addComponent(jLConveyorSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addGap(0, 0, Short.MAX_VALUE)))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addComponent(jLRpm)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(34, 34, 34)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel16)
+                                                    .addComponent(jLabel15))
+                                                .addGap(24, 24, 24)
+                                                .addComponent(jcbMeterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                .addComponent(Angleinput, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                                    .addGroup(layout.createSequentialGroup()
+                                                                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(Beltweightinput, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE))
+                                                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                                        .addComponent(jLabel10)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(Servicefactorinput, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE))
+                                                                    .addGroup(layout.createSequentialGroup()
+                                                                        .addComponent(jLabel27)
+                                                                        .addGap(47, 47, 47)
+                                                                        .addComponent(Applicationfactoranswer, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                            .addGap(18, 18, 18)
+                                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                            .addGap(2, 2, 2)
+                                                            .addComponent(jLabel11)
+                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                            .addComponent(Widthofconveyorinput, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addGap(18, 18, 18)
+                                                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(jBWormBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(jBBrooksCyclo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(jBBevelHelical, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                    .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(16, 16, 16)
+                                        .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel14)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel24))
-                                .addGap(17, 17, 17)
+                                    .addComponent(jLabel24)
+                                    .addComponent(jLabel29)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(Kwoutput)
-                                    .addComponent(Nmoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(Beltloadoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnApplicationfactor)
+                                    .addComponent(rpmResultsOutput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Beltloadoutput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Nmoutput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Kwoutput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(Applicationfactoranswer, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel25)
-                            .addComponent(jLabel26))
-                        .addGap(140, 140, 140))))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jlLengh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jlSpacing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jlunitsperhour, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jweightofunit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Weightofunitinput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Spacinginput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Lengthinput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Unithourinput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel25)
+                                    .addComponent(jLabel26)
+                                    .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel30)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(jlLengthMetres, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(jlSpacingMetress, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(53, 53, 53)
-                                .addComponent(Loadperhourcontiniousbtn)
-                                .addGap(18, 18, 18)
-                                .addComponent(Loadperhourcontiniousoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(weightofunitlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(53, 53, 53)
-                                .addComponent(Productonconveyorbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(pocError, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(124, 124, 124)
-                                .addComponent(speedofbeltbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(speedOfBeltError, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Productonconveyorinput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Lengthofconveyorinput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Conveyorspeedinput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Rpminput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Drumdiameterinput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLConveyorSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 0, Short.MAX_VALUE)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLRpm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(4, 4, 4)))
-                                .addComponent(Rpmconveyor, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(28, 28, 28)
-                        .addComponent(jBQuit, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jBReset)
+                                .addGap(89, 89, 89)
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jBQuit, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Kgsatanygiventimeoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(dbProcessing)
+                            .addComponent(powerLbl))
+                        .addGap(268, 268, 268))))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Beltweightinput, Servicefactorinput, Widthofconveyorinput});
@@ -638,83 +725,65 @@ public class Maininterface extends javax.swing.JFrame
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jcdeiscret)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jcdeiscret)
+                        .addGap(13, 13, 13)
+                        .addComponent(jlunitsperhour)
+                        .addGap(18, 18, 18)
+                        .addComponent(jlLengh)
+                        .addGap(15, 15, 15)
+                        .addComponent(jlSpacing)
+                        .addGap(17, 17, 17)
+                        .addComponent(jweightofunit, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(Unithourinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(speedofbeltbtn)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(jlunitsperhour))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(speedOfBeltError)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                                .addComponent(Unithourinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addComponent(Lengthinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jlLengthMetres, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
-                                .addComponent(Lengthinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jlLengthMetres, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jlLengh)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                                .addComponent(Spacinginput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addComponent(jlSpacingMetress)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(1, 1, 1)
-                                        .addComponent(Spacinginput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(4, 4, 4)
-                                        .addComponent(jlSpacingMetress))
-                                    .addComponent(Loadperhourcontiniousbtn)
-                                    .addComponent(Loadperhourcontiniousoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jlSpacing)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(1, 1, 1)
-                                        .addComponent(Weightofunitinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(2, 2, 2)
-                                        .addComponent(weightofunitlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(Productonconveyorbutton)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(9, 9, 9)
-                                .addComponent(jweightofunit, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(Weightofunitinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(weightofunitlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(loadContinuousLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Loadperhourcontiniousoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(pocError)))
-                .addGap(25, 25, 25)
-                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGap(151, 151, 151)
+                        .addComponent(Kgsatanygiventimeoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(Drumdiameterinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(Drumdiameterinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel5))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(3, 3, 3)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel4)
-                                            .addComponent(jLabel5))))
+                                        .addComponent(jLabel4)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(10, 10, 10)
@@ -732,123 +801,123 @@ public class Maininterface extends javax.swing.JFrame
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(Conveyorspeedinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLConveyorSpeed))))
-                                .addGap(7, 7, 7)
+                                .addGap(6, 6, 6)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(Lengthofconveyorinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel7))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(3, 3, 3)
-                                        .addComponent(jLabel2))))
+                                        .addComponent(jLabel2)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(Productonconveyorinput, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel8)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(Rpmconveyor)))
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(Productonconveyorinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel8)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jcbMeterial, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Angleinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(Applicationfactoranswer, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel27))
+                                .addGap(7, 7, 7)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Servicefactorinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(Beltweightinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(Widthofconveyorinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel12))
+                                .addGap(18, 18, 18)
+                                .addComponent(powerLbl)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(7, 7, 7)))
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Kgsatanygiventimeoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(jcbMeterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(Angleinput)))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(Applicationfactoranswer, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnApplicationfactor))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Servicefactorinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(Beltweightinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(3, 3, 3)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(Widthofconveyorinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jBQuit))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(other, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
+                        .addComponent(jLabel28)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel29)
+                                .addComponent(jLabel30))
+                            .addComponent(rpmResultsOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(Beltloadoutput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(other)
-                                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel14))
+                        .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel26)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(11, 11, 11)
+                                .addComponent(jLabel25))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(Nmoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel24))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(Nmoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4)
+                                .addComponent(Kwoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jBQuit)
+                            .addComponent(jBReset)
+                            .addComponent(jButton1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dbProcessing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jBWormBox)
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel24)
-                                    .addComponent(jLabel25)
-                                    .addComponent(Kwoutput))
-                                .addGap(202, 202, 202))))))
+                                .addComponent(jBBrooksCyclo)
+                                .addGap(18, 18, 18)
+                                .addComponent(jBBevelHelical))
+                            .addComponent(jScrollPane1))))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {Loadperhourcontiniousoutput, pocError, speedOfBeltError});
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {Beltweightinput, Servicefactorinput, Widthofconveyorinput});
 
         Kgsatanygiventimeoutput.getAccessibleContext().setAccessibleName("SalesInfo");
+        loadContinuousLbl.getAccessibleContext().setAccessibleName("LoadHourContinuousLbl");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BtnkgsAtAnyGivenTimeActionPerformed()
+    public void InfoBox(String infoMessage)
+    {
+        JOptionPane.showMessageDialog(null, infoMessage, "Error!", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void CalculateKgsAtAnyGivenTime()
     {
 
         if (Drumdiameterinput.getText().isEmpty() || Rpminput.getText().isEmpty()
                 || Lengthofconveyorinput.getText().isEmpty() || Productonconveyorinput.getText().isEmpty())
         {
-
-            Kgsatanygiventimeoutput.setText("Error please fill out all required fields");
-            Kgsatanygiventimeoutput.setForeground(Color.red);
+            errorMessages.add("Attempted to calculate KGs at any given time but required fields were missing.");
             //Error checking for inputs
-
         } else
         {
 
@@ -889,28 +958,69 @@ public class Maininterface extends javax.swing.JFrame
 
 
     private void otherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_otherActionPerformed
-        if(isDiscreet)
+        try
         {
-            CalculateSpeedOfBelt();
+            if (isDiscreet)
+            {
+                CalculateSpeedOfBelt();
+                CalculateProductOnConveyor();
+                CalculateContinuousLoadPerHour();
+            }
+
+            if (!"".equals(Rpminput.getText()) && !"".equals(Conveyorspeedinput.getText()) && !isDiscreet)
+            {
+                // If all these fields are not empty, they've entered the values manually
+                // This means we need to display an error message telling them to clear one of the fields out
+                // so that the system can calculate the blank field itself rather than risk inaccuracy from
+                // the user.
+                
+                InfoBox("RPM and conveyor speed currently have values."
+                        + "\nThe System requires one of these to be empty in order to calculate the other accurately."
+                        + "\nPlease correct this.");
+            } 
+            else
+            {
+                CaculateRpmOrConveyorSpeedDependingOnInput();
+                CalculateApplicationFactor();
+                Beltload();
+                CalculateTorque();
+                Designkw();
+                CalculateKgsAtAnyGivenTime();
+            }
+        } 
+        catch (Exception e)
+        {
+            //Add this at the first index of the array so it displays first
+            errorMessages.add(0, "Sorry, there were some errors:");
         }
-        Beltload();
-        NM();
-        Designkw();
-        BtnkgsAtAnyGivenTimeActionPerformed();
+
+        DisplayErrorsIfNecessary();
     }//GEN-LAST:event_otherActionPerformed
+
+    private void DisplayErrorsIfNecessary()
+    {
+        String errorMessagesForPopUp = "";
+
+        if (!errorMessages.isEmpty())
+        {
+            for (String message : errorMessages)
+            {
+                errorMessagesForPopUp += message + "\n";
+            }
+            InfoBox(errorMessagesForPopUp);
+            errorMessages.clear();
+        }
+    }
 
     private void Beltload()
     {
         if (Drumdiameterinput.getText().isEmpty() || Widthofconveyorinput.getText().isEmpty()
                 || Beltweightinput.getText().isEmpty() || Lengthofconveyorinput.getText().isEmpty())
         {
-            Beltloadoutput.setText("Error please fill out all required fields");
-            Beltloadoutput.setForeground(Color.red);
+            errorMessages.add("Attempted to calculate Belt Load but one or more required fields: Drum Diameter, Width of Convenyor, Belt Weight, or Length of Conveyor was empty.");
             //Error checking for inputs
-
         } else
         {
-
             Drumdiameterinput1 = Double.parseDouble(Drumdiameterinput.getText());
             Widthofconveyorinput11 = Double.parseDouble(Widthofconveyorinput.getText());
             Beltweightinput12 = Double.parseDouble(Beltweightinput.getText());
@@ -931,14 +1041,13 @@ public class Maininterface extends javax.swing.JFrame
         }
     }
 
-    private void NM()
+    private void CalculateTorque()
     {
-        if (Drumdiameterinput.getText().isEmpty() || Beltweightinput.getText().isEmpty())
+        if (Drumdiameterinput.getText().isEmpty() || Beltweightinput.getText().isEmpty() || Productonconveyorinput.getText().isEmpty())
         {
-            Nmoutput.setText("Error please fill out all required fields");
-            Nmoutput.setForeground(Color.red);
-            //Error checking for inputs
+            errorMessages.add("Attempted to calculate torque but one or more requried fields: Drum Diameter, Product on Conveyor or Belt Weight were empty.");
 
+            //Error checking for inputs
         } else
         {
 
@@ -968,15 +1077,13 @@ public class Maininterface extends javax.swing.JFrame
         Designkwanswer18 = (Kwanswer16 * Servicefactorinput17);
 
         // Format answers to 2 decimal places    
-        String fstring = String.format("%.2f", Designkwanswer18);
-        Designkwanswer18f = (fstring);
-        Kwoutput.setText(fstring);
+        String formattedKWResult = String.format("%.2f", Designkwanswer18);
+        Designkwanswer18f = (formattedKWResult);
+        Kwoutput.setText(formattedKWResult);
         String f1string = String.format("%.2f", Servicefactorinput17);
         Servicefactor17f = f1string;
         Servicefactorinput.setText(f1string);
-
     }
-
 
     private void jcbMeterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbMeterialActionPerformed
         // Select base friction factor for belt/base combinations
@@ -1026,45 +1133,54 @@ public class Maininterface extends javax.swing.JFrame
 
     private void jcdeiscretActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcdeiscretActionPerformed
         // Enable or disable fields for discrete/continuous conveyor loading 
-         
+
         if (jcdeiscret.isSelected())
         {
             isDiscreet = true;
             jlunitsperhour.setEnabled(true);
             Unithourinput.setEnabled(true);
-            speedofbeltbtn.setEnabled(true);
             jlLengh.setEnabled(true);
             jlSpacing.setEnabled(true);
             Lengthinput.setEnabled(true);
             Spacinginput.setEnabled(true);
             jlLengthMetres.setEnabled(true);
             jlSpacingMetress.setEnabled(true);
-            Loadperhourcontiniousbtn.setEnabled(true);
             Weightofunitinput.setEnabled(true);
             weightofunitlabel.setEnabled(true);
             jweightofunit.setEnabled(true);
-            Productonconveyorbutton.setEnabled(true);
-        } 
-        else
+
+            Rpminput.setEditable(false);
+            Conveyorspeedinput.setEditable(false);
+            Productonconveyorinput.setEditable(false);
+            Rpminput.setBackground(Color.gray);
+            Conveyorspeedinput.setBackground(Color.gray);
+            Productonconveyorinput.setBackground(Color.gray);
+            Rpminput.setText("");
+            Conveyorspeedinput.setText("");
+            Productonconveyorinput.setText("");
+        } else
         {
             isDiscreet = false;
             jlunitsperhour.setEnabled(false);
             Unithourinput.setEnabled(false);
-            speedofbeltbtn.setEnabled(false);
             jlLengh.setEnabled(false);
             jlSpacing.setEnabled(false);
             Lengthinput.setEnabled(false);
             Spacinginput.setEnabled(false);
             jlLengthMetres.setEnabled(false);
             jlSpacingMetress.setEnabled(false);
-            Loadperhourcontiniousbtn.setEnabled(false);
             Weightofunitinput.setEnabled(false);
             weightofunitlabel.setEnabled(false);
             jweightofunit.setEnabled(false);
-            Productonconveyorbutton.setEnabled(false);
+
+            Rpminput.setEditable(true);
+            Conveyorspeedinput.setEditable(true);
+            Productonconveyorinput.setEditable(true);
+            Rpminput.setBackground(Color.white);
+            Conveyorspeedinput.setBackground(Color.white);
+            Productonconveyorinput.setBackground(Color.white);
             //Sets discreet interface to be visible and useable or visible but not useable 
         }
-
     }//GEN-LAST:event_jcdeiscretActionPerformed
 
     private void jcdeiscretItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcdeiscretItemStateChanged
@@ -1087,20 +1203,12 @@ public class Maininterface extends javax.swing.JFrame
 
     }//GEN-LAST:event_RpminputActionPerformed
 
-    private void speedofbeltbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_speedofbeltbtnActionPerformed
-    // Calculate speed of belt for discrete loading
-
-        
-    }//GEN-LAST:event_speedofbeltbtnActionPerformed
-
     private void CalculateSpeedOfBelt()
     {
         if (Unithourinput.getText().isEmpty() || Lengthinput.getText().isEmpty() || Spacinginput.getText().isEmpty())
         {
-            speedOfBeltError.setText("Error please enter units per hour lengh and spacing");
-            speedOfBeltError.setForeground(Color.red);
-        } 
-        else
+            errorMessages.add("Attempted to calculate Speed of Belt but one or more of the required fields: Units Per Hour, Product Length, or Spacing Per Unit were empty");
+        } else
         {
             // get required input
             Unithourinput26 = Double.parseDouble(Unithourinput.getText());
@@ -1117,14 +1225,13 @@ public class Maininterface extends javax.swing.JFrame
             Conveyorspeedinput.setForeground(Color.BLACK);
         }
     }
-    
-    private void LoadperhourcontiniousbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadperhourcontiniousbtnActionPerformed
+
+    private void CalculateContinuousLoadPerHour()
+    {
         if (Unithourinput.getText().isEmpty())
         {
-            Loadperhourcontiniousoutput.setText("Error please enter units per hour");
-            Loadperhourcontiniousoutput.setForeground(Color.red);
+            errorMessages.add("Attempted to calculate Continuous Load per hour but required field: Units Per Hour was empty.");
             //Error checking for inputs
-
         } else
         {
             Unithourinput26 = Double.parseDouble(Unithourinput.getText());
@@ -1140,20 +1247,15 @@ public class Maininterface extends javax.swing.JFrame
             Loadperhourcontiniousoutput.setText(fstring);
             //pushing the values to show on the textbox.
             Loadperhourcontiniousoutput.setForeground(Color.BLACK);
-
         }
+    }
 
-    }//GEN-LAST:event_LoadperhourcontiniousbtnActionPerformed
-
-    private void btnApplicationfactorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApplicationfactorActionPerformed
+    private void CalculateApplicationFactor()
+    {
         // Calculate Application Factor 
-
         if (Angleinput.getText().isEmpty())
         {
-            Applicationfactoranswer.setText("Error please enter an angle");
-            Applicationfactoranswer.setForeground(Color.red);
-            //Error checking for inputs
-
+            errorMessages.add("Attempted to calculate Applcation Factor but required field: Angle was empty.");
         } else
         {
             // Get slope angle and convert to radians
@@ -1170,7 +1272,7 @@ public class Maininterface extends javax.swing.JFrame
             Applicationfactoranswer.setText(fstring);
             Applicationfactoranswer.setForeground(Color.BLACK);
         }
-    }//GEN-LAST:event_btnApplicationfactorActionPerformed
+    }
 
     private void LengthinputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LengthinputActionPerformed
 
@@ -1180,17 +1282,15 @@ public class Maininterface extends javax.swing.JFrame
 
     }//GEN-LAST:event_UnithourinputActionPerformed
 
-    private void ProductonconveyorbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProductonconveyorbuttonActionPerformed
+    private void CalculateProductOnConveyor()
+    {
         // calculate weight on conveyor for discrete loads
-
         if (Weightofunitinput.getText().isEmpty()
                 || Lengthinput.getText().isEmpty() || Spacinginput.getText().isEmpty()
                 || Lengthofconveyorinput.getText().isEmpty())
         {
-            pocError.setText("Please enter all necessary fields");
-            pocError.setForeground(Color.red);
             //Error checking for inputs
-
+            errorMessages.add("Attempted to calculate Product on Conveyor but one or more required fields: Weight of Unit, Length of Unit, Spacing, or Length of Conveyor were empty.");
         } else
         {
             // get required values
@@ -1204,31 +1304,21 @@ public class Maininterface extends javax.swing.JFrame
             // total weight =  number of units * unit weight
             Productonconveyor32 = (Lengthofconveyor6 / (Lengthinput27 + Spacinginput28)) * Weightofunitinput31;
 
-            // ensure error text turned off
-            pocError.setText("");
-
             // formats output
-            String fstring = String.format("%.2f", Productonconveyor32);
+            String fstring = String.format("%d", Math.round(Productonconveyor32));
             Productonconveyorinput.setText(fstring);
-
         }
-    }//GEN-LAST:event_ProductonconveyorbuttonActionPerformed
-
-    private void RpmconveyorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RpmconveyorActionPerformed
-        // selects appropriate speed or rpm calculation
-
-        if (Conveyorspeedinput.getText().isEmpty() && Rpminput != null)
-        {
-            Rpm();
-        } else if (Rpminput.getText().isEmpty() && Conveyorspeedinput != null)
-        {
-            conveyorspeed();
-        }
-
-    }//GEN-LAST:event_RpmconveyorActionPerformed
-
+    }
     private void jBQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBQuitActionPerformed
-        //Quit button
+        try
+        {
+            //We need to delete the temporary output file that may have been created
+            Path path = Paths.get("C:\\Windows\\Temp\\ConveyorFile.pdf");
+            Files.delete(path);
+        } //Because we're dealing with file IO we need error handling
+        catch (IOException e)
+        {
+        }
 
         System.exit(0);
     }//GEN-LAST:event_jBQuitActionPerformed
@@ -1237,7 +1327,6 @@ public class Maininterface extends javax.swing.JFrame
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try
         {
-
             save.setVisible(true);
         } catch (Exception ie)
         {
@@ -1245,17 +1334,146 @@ public class Maininterface extends javax.swing.JFrame
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void Rpm()
+    private void jBWormBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jBWormBoxActionPerformed
+    {//GEN-HEADEREND:event_jBWormBoxActionPerformed
+        try
+        {
+            GearBoxDatabaseConnection database = new GearBoxDatabaseConnection();
+            ArrayList<String> options = database.GetWormBoxOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
+            String results = "";
+            int matchNumber = 0;
+
+            if (!options.isEmpty())
+            {
+
+                for (String option : options)
+                {
+                    matchNumber += 1;
+                    
+                    // we only want to display the first two options
+                    // so once the match number is 2, we've got two options 
+                    if (matchNumber > 2)
+                    {
+                        break;
+                    }
+
+                    results += String.format("\n%d. %s\n", matchNumber, option);
+                }
+
+                GearboxOptionsOutput.setText(results);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "No matches were found for the calculated results.", "No Matches", JOptionPane.INFORMATION_MESSAGE);
+            }        
+        } 
+        catch (NumberFormatException | HeadlessException e)
+        {
+            InfoBox(e.getMessage());
+        }
+    }//GEN-LAST:event_jBWormBoxActionPerformed
+
+    private void jBResetActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jBResetActionPerformed
+    {//GEN-HEADEREND:event_jBResetActionPerformed
+        Unithourinput.setText("");
+        Lengthinput.setText("");
+        Spacinginput.setText("");
+        Loadperhourcontiniousoutput.setText("");
+        Weightofunitinput.setText("");
+        Drumdiameterinput.setText("");
+        Rpminput.setText("");
+        Unithourinput.setText("");
+        Conveyorspeedinput.setText("");
+        Lengthofconveyorinput.setText("");
+        Productonconveyorinput.setText("");
+        Angleinput.setText("0");
+        Applicationfactoranswer.setText("");   
+        Servicefactorinput.setText("");
+        Beltweightinput.setText("");
+        Widthofconveyorinput.setText("");
+        rpmResultsOutput.setText("");
+        Beltloadoutput.setText("");
+        Nmoutput.setText("");
+        Kwoutput.setText("");
+        GearboxOptionsOutput.setText("");
+    }//GEN-LAST:event_jBResetActionPerformed
+
+    private void jBBrooksCycloActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jBBrooksCycloActionPerformed
+    {//GEN-HEADEREND:event_jBBrooksCycloActionPerformed
+        try
+        {
+            GearBoxDatabaseConnection database = new GearBoxDatabaseConnection();
+            ArrayList<String> options = database.GetBrooksCycloOptions();
+            String results = "";
+            int matchNumber = 0;
+            
+            if (!options.isEmpty())
+            {
+                for (String option : options)
+                {
+                    matchNumber += 1;
+                    
+                    // we only want to display the first two options
+                    // so once the match number is 2, we've got two options 
+                    if (matchNumber > 2)
+                    {
+                        break;
+                    }
+
+                    results += String.format("%d. %s\n\n", matchNumber, option);
+                }
+                
+                GearboxOptionsOutput.setText(results);
+            } 
+            else
+            {
+                JOptionPane.showMessageDialog(null, "No matches were found for the calculated results.", "No Matches", JOptionPane.INFORMATION_MESSAGE);
+            }        
+        } 
+        catch (NumberFormatException | HeadlessException e)
+        {
+            InfoBox(e.getMessage());
+        }
+    }//GEN-LAST:event_jBBrooksCycloActionPerformed
+
+    private void jBBevelHelicalActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jBBevelHelicalActionPerformed
+    {//GEN-HEADEREND:event_jBBevelHelicalActionPerformed
+        JOptionPane.showMessageDialog(null, "Coming Soon!", "Under Construction", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jBBevelHelicalActionPerformed
+
+    @Override
+    public void print(Graphics g
+    )
+    {
+        super.print(g); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void CaculateRpmOrConveyorSpeedDependingOnInput()
+    {
+        if (Conveyorspeedinput.getText().isEmpty() && Rpminput != null)
+        {
+            CalculateConveyorSpeed();
+        } else if (Rpminput.getText().isEmpty() && Conveyorspeedinput != null)
+        {
+            CalculateRPM();
+        } else
+        {
+            //In the case the user enters both the rpm and conveyor speed, neither of the above methods will be executed
+            //so we need to set the rpm results output to whatever they entered at this point.
+            rpmResultsOutput.setText(Rpminput.getText());
+            Rpmconveyor34 = Double.parseDouble(Rpminput.getText());
+        }
+    }
+
+    private void CalculateConveyorSpeed()
     {
         // Calculates belt speed  from drum diameter and rpm
 
         if (Rpminput.getText().isEmpty() || Drumdiameterinput.getText().isEmpty())
         {
-            jLRpm.setText("Error");
-            jLRpm.setForeground(Color.red);
+            errorMessages.add("Attempted to calculate Conveyor Speed based on RPM but one or more required fields: RPM or Drum Diameter were empty.");
         } else
         {
-
             Rpmoutput20 = Double.parseDouble(Rpminput.getText());
             Drumdiameterinput1 = Double.parseDouble(Drumdiameterinput.getText());
             Conveyorrpm33 = Rpmoutput20 * (Drumdiameterinput1 * 3.142);
@@ -1263,19 +1481,23 @@ public class Maininterface extends javax.swing.JFrame
             // Formats output
             String fstring = String.format("%.2f", Conveyorrpm33);
             Conveyorspeedinput.setText(fstring);
+            // when not a discreet load we need to set the speed of belt variable here in order for it to not be null when creating the pdf
+            Speedofbeltanswer29f = fstring;
             jLRpm.setText("Rpm");
             jLRpm.setForeground(Color.black);
+
+            //because the rpm has been entered manually in order to execute this method, we need to assign the rpm input text to the result field
+            rpmResultsOutput.setText(Rpminput.getText());
 
         }
     }
 
-    private void conveyorspeed()
+    private void CalculateRPM()
     {
         // Calculates Rpm from belt speed and drum diameter
         if (Conveyorspeedinput.getText().isEmpty() || Drumdiameterinput.getText().isEmpty())
         {
-            jLConveyorSpeed.setText("Please enter ConveyorSpeed and Drumdiameter");
-            jLConveyorSpeed.setForeground(Color.red);
+            errorMessages.add("Attempted to calculate RPM based on Conveyor Speed but one or more required fields: Conveyor Speed or Drum Diameter were empty.");
         } else
         {
             //Getting required inputs
@@ -1283,18 +1505,22 @@ public class Maininterface extends javax.swing.JFrame
             Conveyorspeedinput19 = Double.parseDouble(Conveyorspeedinput.getText());
             Drumdiameterinput1 = Double.parseDouble(Drumdiameterinput.getText());
 
+            // when not a discreet load we need to set the speed of belt variable here in order for it to not be null when creating the pdf
+            Speedofbeltanswer29f = Conveyorspeedinput.getText();
             // rpm = conveypr s[eed / drum circumference.
             Rpmconveyor34 = Conveyorspeedinput19 / (Drumdiameterinput1 * 3.1415927);
 
-            // Fromat outputs
-            String fstring = String.format("%.2f", Rpmconveyor34);
-            Rpminput.setText(fstring);
-            Rpmconveyor35 = fstring;
+            String formattedRPM = Math.round(Rpmconveyor34) < 10 ? String.format("%.1f", Rpmconveyor34) : String.format("%d", Math.round(Rpmconveyor34));
+
+            Rpminput.setText(formattedRPM);
+            Rpmconveyor35 = formattedRPM;
+            rpmResultsOutput.setText(Rpminput.getText());
             jLRpm.setText("Rpm");
             jLRpm.setForeground(Color.black);
 
         }
     }
+    //<editor-fold defaultstate="collapsed" desc="getters">
 
     public double getAngleInput()
     {
@@ -1395,77 +1621,7 @@ public class Maininterface extends javax.swing.JFrame
     {
         return this.Rpmconveyor34;
     }
-    //get statement's for security and to return variables to other classes within the project
-
-    public void setCircumferenceanswer2(double Circumferenceanswer2)
-    {
-        this.Circumferenceanswer2 = Circumferenceanswer2;
-    }
-
-    public void setRpmoutput20(double Rpmoutput20)
-    {
-        this.Rpmoutput20 = Rpmoutput20;
-    }
-
-    public void setMetresperminuteanswer4(double Metresperminuteanswer4)
-    {
-        this.Metresperminuteanswer4 = Metresperminuteanswer4;
-    }
-
-    public void setMetresperhouranswer5(double Metresperhouranswer5)
-    {
-        this.Metresperhouranswer5 = Metresperhouranswer5;
-    }
-
-    public void setLengthperhouranswer7(double Lengthperhouranswer7)
-    {
-        this.Lengthperhouranswer7 = Lengthperhouranswer7;
-    }
-
-    public void setKgsperhouranswer9(double Kgsperhouranswer9)
-    {
-        this.Kgsperhouranswer9 = Kgsperhouranswer9;
-    }
-
-    public void setKgatanygiventimeanswer10(double Kgatanygiventimeanswer10)
-    {
-        this.Kgatanygiventimeanswer10 = Kgatanygiventimeanswer10;
-    }
-
-    public void setBeltloadanswer13(double Beltloadanswer13)
-    {
-        this.Beltloadanswer13 = Beltloadanswer13;
-    }
-
-    public void setNmanswer15(double Nmanswer15)
-    {
-        this.Nmanswer15 = Nmanswer15;
-    }
-
-    public void setDesignkwanswer18(double Designkwanswer18)
-    {
-        this.Designkwanswer18 = Designkwanswer18;
-    }
-
-    public void setBeltspeedoutput21(double Beltspeedoutput21)
-    {
-        this.Beltspeedoutput21 = Beltspeedoutput21;
-    }
-
-    public void setRadiananswer25(double Radiananswer25)
-    {
-        this.Radiananswer25 = Radiananswer25;
-    }
-
-    public void setSpeedofbeltanswer29(double Speedofbeltanswer29)
-    {
-        this.Speedofbeltanswer29 = Speedofbeltanswer29;
-    }
-
-    public void setLoadperhourcontiniousoutput30(double Loadperhourcontiniousoutput30)
-    {
-        this.Loadperhourcontiniousoutput30 = Loadperhourcontiniousoutput30;
-    }
+//</editor-fold>
 
     /**
      * @param args the command line arguments
@@ -1509,12 +1665,15 @@ public class Maininterface extends javax.swing.JFrame
             public void run()
             {
                 new Maininterface().setVisible(true);
-
             }
         });
+        
+        // create the tables we need when the app is launched
+        GearBoxDatabaseConnection databaseConnection = new GearBoxDatabaseConnection();
+        databaseConnection.CreateTables();
     }
 
-    // <editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Variables declaration - do not modify">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Angleinput;
     private javax.swing.JLabel Applicationfactoranswer;
@@ -1522,24 +1681,26 @@ public class Maininterface extends javax.swing.JFrame
     private javax.swing.JTextField Beltweightinput;
     private javax.swing.JTextField Conveyorspeedinput;
     private javax.swing.JTextField Drumdiameterinput;
+    private javax.swing.JTextArea GearboxOptionsOutput;
     private javax.swing.JLabel Kgsatanygiventimeoutput;
     private javax.swing.JLabel Kwoutput;
     private javax.swing.JTextField Lengthinput;
     private javax.swing.JTextField Lengthofconveyorinput;
-    private javax.swing.JButton Loadperhourcontiniousbtn;
     private javax.swing.JLabel Loadperhourcontiniousoutput;
     private javax.swing.JLabel Nmoutput;
-    private javax.swing.JButton Productonconveyorbutton;
     private javax.swing.JTextField Productonconveyorinput;
-    private javax.swing.JButton Rpmconveyor;
     private javax.swing.JTextField Rpminput;
     private javax.swing.JTextField Servicefactorinput;
     private javax.swing.JTextField Spacinginput;
     private javax.swing.JTextField Unithourinput;
     private javax.swing.JTextField Weightofunitinput;
     private javax.swing.JTextField Widthofconveyorinput;
-    private javax.swing.JButton btnApplicationfactor;
+    private javax.swing.JLabel dbProcessing;
+    private javax.swing.JButton jBBevelHelical;
+    private javax.swing.JButton jBBrooksCyclo;
     private javax.swing.JButton jBQuit;
+    private javax.swing.JButton jBReset;
+    private javax.swing.JButton jBWormBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLConveyorSpeed;
     private javax.swing.JLabel jLRpm;
@@ -1556,13 +1717,16 @@ public class Maininterface extends javax.swing.JFrame
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1570,6 +1734,7 @@ public class Maininterface extends javax.swing.JFrame
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox jcbMeterial;
     private javax.swing.JCheckBox jcdeiscret;
     private javax.swing.JLabel jlLengh;
@@ -1578,10 +1743,10 @@ public class Maininterface extends javax.swing.JFrame
     private javax.swing.JLabel jlSpacingMetress;
     private javax.swing.JLabel jlunitsperhour;
     private javax.swing.JLabel jweightofunit;
+    private javax.swing.JLabel loadContinuousLbl;
     private javax.swing.JButton other;
-    private javax.swing.JLabel pocError;
-    private javax.swing.JLabel speedOfBeltError;
-    private javax.swing.JButton speedofbeltbtn;
+    private javax.swing.JLabel powerLbl;
+    private javax.swing.JLabel rpmResultsOutput;
     private javax.swing.JLabel weightofunitlabel;
     // End of variables declaration//GEN-END:variables
 // </editor-fold>
