@@ -34,7 +34,6 @@ public class SalesInfo extends javax.swing.JFrame {
     protected String ClientName;
     protected String ProjectName;
     public Maininterface mainDataEntry; 
-    private TextOverlay overlay;
     private BufferedImage image2;
     private String Branch;
 
