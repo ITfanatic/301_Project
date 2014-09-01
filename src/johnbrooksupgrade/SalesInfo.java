@@ -286,13 +286,13 @@ public class SalesInfo extends javax.swing.JFrame {
                     content.moveTextPositionByAmount(0, -14);
                     content.drawString("Coeff. friction: " + mainDataEntry.getRadiananswer25f());
                     content.moveTextPositionByAmount(0, -14);
-                    content.drawString("Total belt pull Kgf  : " + mainDataEntry.getBeltloadanswer13f());
+                    content.drawString("Total belt pull Kgf: " + mainDataEntry.getBeltloadanswer13f());
                     content.moveTextPositionByAmount(0, -14);
-                    content.drawString("Nm Torque  : " + mainDataEntry.getNmanswer15f());
+                    content.drawString("Nm Torque: " + mainDataEntry.getNmanswer15f());
                     content.moveTextPositionByAmount(0, -14);
-                    content.drawString("Service Factor  : " + mainDataEntry.getServicefactor17f());
+                    content.drawString("Service Factor: " + mainDataEntry.getServicefactor17f());
                     content.moveTextPositionByAmount(0, -14);
-                    content.drawString("Design Kw  : " + mainDataEntry.getDesignkwanswer18f());
+                    content.drawString("Design Kw: " + mainDataEntry.getDesignkwanswer18f());
                     //grabbing the values in the selected variables and positions them
 
                 //TODO: Gearbox recommendations 
