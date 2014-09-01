@@ -1,7 +1,6 @@
 package johnbrooksupgrade;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,21 +28,23 @@ public class GearBoxDatabaseConnection
 
         try
         {
-            Class.forName(driver).newInstance();
-            Connection sqlCon = DriverManager.getConnection(url);
-            java.sql.Statement st = sqlCon.createStatement();        
-            String selectOptions = String.format("SELECT Size, Inches FROM Wormbox WHERE KWInput=%.2f and RPM >= %.1f and Torque >= %.2f", dbKilloWatt, rpm, torque);
             
-            ResultSet res = st.executeQuery(selectOptions);
-
-            while (res.next())
+            Class.forName(driver).newInstance();
+            try (Connection sqlCon = DriverManager.getConnection(url))
             {
-                int motorSize = res.getInt("Size");
-                double gearboxRatio = res.getDouble("Inches");
-                options.add(String.format("%.2fKw 4P Motor \nFCNDK %d %.2f:1", dbKilloWatt,motorSize, gearboxRatio));                
+                java.sql.Statement st = sqlCon.createStatement();
+                String selectOptions = String.format("SELECT Size, Inches FROM Wormbox WHERE KWInput=%.2f and RPM >= %.1f and Torque >= %.2f", dbKilloWatt, rpm, torque);
+                                
+                ResultSet res = st.executeQuery(selectOptions);
+                
+                while (res.next())
+                {
+                    int motorSize = res.getInt("Size");
+                    double gearboxRatio = res.getDouble("Inches");
+                    options.add(String.format("%.2fKw 4P Motor \nFCNDK %d %.2f:1", dbKilloWatt,motorSize, gearboxRatio));
+                }
             }
-
-            sqlCon.close();
+            
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error!", JOptionPane.INFORMATION_MESSAGE);
@@ -117,20 +118,20 @@ public class GearBoxDatabaseConnection
         try
         {
             Class.forName(driver).newInstance();
-            Connection sqlCon = DriverManager.getConnection(url);
-            java.sql.Statement st = sqlCon.createStatement();
-           // String selectOptions = String.format("SELECT Size, Inches FROM Wormbox WHERE KWInput=%.2f and RPM >= %.1f and Torque >= %.2f", dbKilloWatt, rpm, torque);
-            ResultSet res = st.executeQuery("SELECT * FROM Brookscyclo WHERE ID=1");
-
-            while (res.next())
+            try (Connection sqlCon = DriverManager.getConnection(url))
             {
+                java.sql.Statement st = sqlCon.createStatement();
+                // String selectOptions = String.format("SELECT Size, Inches FROM Wormbox WHERE KWInput=%.2f and RPM >= %.1f and Torque >= %.2f", dbKilloWatt, rpm, torque);
+                ResultSet res = st.executeQuery("SELECT * FROM Brookscyclo WHERE ID=1");
+                
+                while (res.next())
+                {
 //                int motorSize = res.getInt("Size");
 //                double gearboxRatio = res.getDouble("Inches");
 //                options.add(String.format("%.2fKw 4P Motor \nFCNDK %d %.2f:1", dbKilloWatt, motorSize, gearboxRatio));
-                options.add(res.getString("Gearbox"));
+                    options.add(res.getString("Gearbox"));
+                }
             }
-
-            sqlCon.close();
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error!", JOptionPane.INFORMATION_MESSAGE);
