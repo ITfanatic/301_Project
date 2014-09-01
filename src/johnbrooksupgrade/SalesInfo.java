@@ -5,22 +5,25 @@
  */
 package johnbrooksupgrade;
 
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDPixelMap;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 //import classes for functionality
 
 public class SalesInfo extends javax.swing.JFrame {
@@ -34,27 +37,21 @@ public class SalesInfo extends javax.swing.JFrame {
     private TextOverlay overlay;
     private BufferedImage image2;
     private String Branch;
+
     //import classes and creation of variables
     /**
-     *
-     *
-     *
-     *
-     *
-     *
      * @param mainDataEntryIn
-     *
-     *
      */
     public SalesInfo(Maininterface mainDataEntryIn) {   
         // This class constructor requires the calling class to pass a reference to itself.
         // That will allow each new instance of SalesInfo to know who called it.
         // Here, we call that calling class "mainDataEntry".
-
+        mainDataEntry = mainDataEntryIn;   
+        
         initComponents();
-        mainDataEntry = mainDataEntryIn; 
-       
- //Referencing the other classes to bring in functionality
+        
+        //Set the date to today's by default
+        DateInput.setText(GetCurrentDate());
     }
 
     /**
@@ -64,7 +61,8 @@ public class SalesInfo extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         Save = new javax.swing.JButton();
         SalesmenInput = new javax.swing.JTextField();
@@ -78,28 +76,26 @@ public class SalesInfo extends javax.swing.JFrame {
         jComboBoxBranch = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
-        Save.setText("Save");
-        Save.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        Save.setText("Generate PDF");
+        Save.setToolTipText("");
+        Save.setActionCommand("");
+        Save.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 SaveActionPerformed(evt);
             }
         });
 
         SalesmenInput.setText("Name");
-        SalesmenInput.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SalesmenInputActionPerformed(evt);
-            }
-        });
 
         jLabel1.setText("Name of SalesPerson");
 
         jLabel2.setText("Name of Client");
 
         ClientnameInput.setText("Client");
-
-        DateInput.setText("dd/mm/yyyy");
 
         jLabel3.setText("Date");
 
@@ -108,8 +104,10 @@ public class SalesInfo extends javax.swing.JFrame {
         ProjectNameInput.setText("Name");
 
         jComboBoxBranch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Branch", "Auckland", "Wellington", "Christchurch" }));
-        jComboBoxBranch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jComboBoxBranch.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jComboBoxBranchActionPerformed(evt);
             }
         });
@@ -133,11 +131,11 @@ public class SalesInfo extends javax.swing.JFrame {
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(DateInput, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                            .addComponent(DateInput, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ClientnameInput, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
                             .addComponent(SalesmenInput)
-                            .addComponent(ClientnameInput)
                             .addComponent(ProjectNameInput))
-                        .addGap(146, 146, 146))
+                        .addGap(63, 63, 63))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jComboBoxBranch, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -171,10 +169,6 @@ public class SalesInfo extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void SalesmenInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalesmenInputActionPerformed
-        //old code
-    }//GEN-LAST:event_SalesmenInputActionPerformed
-
     private void jComboBoxBranchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxBranchActionPerformed
         int item = jComboBoxBranch.getSelectedIndex();
 
@@ -206,96 +200,6 @@ public class SalesInfo extends javax.swing.JFrame {
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(windowclosingEvent);
     }//closes the window once you click save
 
-    private void ClientSave() {
-        
-        try {
-
-            PDDocument doc;
-            PDPage page;
-
-            doc = new PDDocument();
-
-            // Create a new blank page and add it to the document
-            page = new PDPage();
-            doc.addPage(page);
-            PDFont font = PDType1Font.TIMES_BOLD;
-            PDPageContentStream content = new PDPageContentStream(doc, page);
-            content.beginText();
-            content.setFont(font, 30);
-
-            // Save the newly created document
-            content.moveTextPositionByAmount(170, 670);
-            content.drawString("Conveyor Belt Information ");
-            PDFont font2 = PDType1Font.HELVETICA;
-            content.setFont(font, 14);
-            content.moveTextPositionByAmount(-130, -65);
-            content.drawString("Date:" + getdate());
-            content.moveTextPositionByAmount(0, -20);
-            content.drawString("Sales person: " + getsalesMen());
-            content.moveTextPositionByAmount(0, -20);
-            //grabs the values out of the variables and positions them
-            switch (Branch) {
-                case "AUCKLAND":
-                    content.drawString("Branch:AUCKLAND");
-                    content.moveTextPositionByAmount(0, -20);
-                    content.drawString("Freephone: 0800 48 49 50");
-                    content.moveTextPositionByAmount(0, -20);
-                    content.drawString("E-mail: salesakl@johnbrooks.co.nz");
-                    content.moveTextPositionByAmount(0, -20);
-                    content.drawString("5 Andromeda Cres, East Tamaki");
-                    break;
-                case "WELLINGTON":
-                    content.drawString("Branch:WELLINGTON");
-                    content.moveTextPositionByAmount(0, -20);
-                    content.drawString("Freephone: 0800 24 34 44");
-                    content.moveTextPositionByAmount(0, -20);
-                    content.drawString("E-mail: saleswn@johnbrooks.co.nz");
-                    content.moveTextPositionByAmount(0, -20);
-                    content.drawString("495 Hutt Road, Lower Hutt");
-                    break;
-                case "CHRISTCHURCH":
-                    content.drawString("Branch:CHRISTCHURCH");
-                    content.moveTextPositionByAmount(0, -20);
-                    content.drawString("Freephone: 0800 37 38 39");
-                    content.moveTextPositionByAmount(0, -20);
-                    content.drawString("E-mail: saleschc@johnbrooks.co.nz");
-                    content.moveTextPositionByAmount(0, -20);
-                    content.drawString("214 Waltham Road, Waltham");
-                    break;
-            }
-            //depending which case is selected the values will be outputed and also positioned
-            
-            content.moveTextPositionByAmount(0, -20);
-            content.drawString("Client Name: " + getClientName());
-            content.moveTextPositionByAmount(0, -20);
-            content.drawString("Project Name: " + getProjectName());
-
-            content.endText();
-            
-            overlay = new TextOverlay(this, mainDataEntry);
-            overlay.imagesave();
-            // code to insert a BufferedImage into a file
-            
-            BufferedImage img = overlay.getImage();
-            PDXObjectImage ximage = new PDPixelMap(doc, img);
-            content.drawImage(ximage, 120, 200); 
-            //draws image and sizes it
-            image2 = ImageIO.read(new File("John Brooks logo - New Globe - Industral automationresized.jpg"));
-            BufferedImage logo = image2;
-            //creates new file with the image in it
-            PDXObjectImage jblogo = new PDPixelMap(doc, logo);
-
-            content.drawImage(jblogo, 20, 710);
-            //postioning of image
-            content.close();
-            doc.save(Filename + "Client.pdf");
-            doc.close();
-
-        } catch (Exception ie) {
-            System.out.println(ie);
-        }
-    }
-
     private void SaveActionPerformed(java.awt.event.ActionEvent evt) {
         Salesmen = SalesmenInput.getText();
         Date = DateInput.getText();
@@ -311,20 +215,19 @@ public class SalesInfo extends javax.swing.JFrame {
         //error message box if they don't select a branch
         if (Branch != null) {
             
-
-            JFileChooser chooser = new JFileChooser();
-            FileNameExtensionFilter myfilter = new FileNameExtensionFilter("PDF FILE", "pdf");
-            chooser.addChoosableFileFilter(myfilter);
-            chooser.setAcceptAllFileFilterUsed(false);
-            chooser.showSaveDialog(null);
-            File myfile = chooser.getSelectedFile();
+//            JFileChooser chooser = new JFileChooser();
+//            FileNameExtensionFilter myfilter = new FileNameExtensionFilter("PDF FILE", "pdf");
+//            chooser.addChoosableFileFilter(myfilter);
+//            chooser.setAcceptAllFileFilterUsed(false);
+//            chooser.showSaveDialog(null);
+            
+            //We want to save the file to Windows' temporary files folder so it can be loaded from there straight away
+            //This temporary file is deleted when the program is exited
+            File myfile = new File("C:\\Windows\\Temp\\ConveyorFile.pdf");
+            
             //creates a new pdf
             if ((myfile) != null) {
-                Filename = myfile.getAbsolutePath();
                 try {
-
-                    ClientSave();
-
                     PDDocument doc;
                     PDPage page;
 
@@ -333,29 +236,30 @@ public class SalesInfo extends javax.swing.JFrame {
                     
                     page = new PDPage();
                     doc.addPage(page);
-                    PDFont font = PDType1Font.TIMES_BOLD;
+                    PDFont font = PDType1Font.COURIER_BOLD;
                     PDPageContentStream content = new PDPageContentStream(doc, page);
                     content.beginText();
                     content.setFont(font, 30);
+                    
             // creates a new page and gives it formatting of text
-                    
-                    content.moveTextPositionByAmount(170, 670);
+                    content.moveTextPositionByAmount(110, 600);
                     content.drawString("Technical Specifications ");
-                    PDFont font2 = PDType1Font.HELVETICA;
+                    PDFont font2 = PDType1Font.COURIER;
                     content.setFont(font, 14);
-                    content.moveTextPositionByAmount(-130, -65);
+                    content.moveTextPositionByAmount(-50, -65);
                     content.drawString("Date:" + getdate());
-                    content.moveTextPositionByAmount(0, -32);
+                    content.moveTextPositionByAmount(0, -14);
                     content.drawString("Sales person: " + getsalesMen());
-                    content.moveTextPositionByAmount(0, -32);
+                    content.moveTextPositionByAmount(0, -14);
                     content.drawString("Client Name: " + getClientName());
-                    content.moveTextPositionByAmount(0, -32);
+                    content.moveTextPositionByAmount(0, -14);
                     content.drawString("Project Name: " + getProjectName());
-                    content.moveTextPositionByAmount(0, -64);
+                    content.moveTextPositionByAmount(0, -32);
                     
-                // Loading Details    
-                    content.setFont(font, 20);
-                    content.drawString("Load Specifications");
+                // Specifications    
+                    content.setFont(PDType1Font.COURIER_BOLD, 20);
+                    content.drawString("Specifications");
+                    content.moveTextPositionByAmount(0, -10);
                     content.setFont(font, 14);
                     content.moveTextPositionByAmount(10, -14);
                     content.drawString("Speed of Belt M/pm: " + mainDataEntry.getSpeedofbeltanswer29f());
@@ -363,13 +267,7 @@ public class SalesInfo extends javax.swing.JFrame {
                     content.drawString("Overall Circumference : " + mainDataEntry.getCircumferenceanswer2f());
                     content.moveTextPositionByAmount(0, -14);
                     content.drawString("Metres per minute: " + mainDataEntry.getMetresperminuteanswer4f());
-                    content.moveTextPositionByAmount(-10, -28);
-                    
-                // Conveyor Details    
-                    content.setFont(font, 20);
-                    content.drawString("Conveyor Factors");
-                    content.setFont(font, 14);
-                    content.moveTextPositionByAmount(10, -14);
+                    content.moveTextPositionByAmount(0, -14);
                     content.drawString("Metres per hour: " + mainDataEntry.getMetresperhouranswer5f());
                     content.moveTextPositionByAmount(0, -14);
                     content.drawString("Product per hour: " + mainDataEntry.getLengthperhouranswer7f());
@@ -379,43 +277,62 @@ public class SalesInfo extends javax.swing.JFrame {
                     content.drawString("Kg at any given time: " + mainDataEntry.getKgatanygiventimeanswer10f());
                     content.moveTextPositionByAmount(-10, -28);
                     
-                // Calculated factors    
-                    content.setFont(font, 20);
-                    content.drawString("Design Details");
+                // Results
+                    content.setFont(PDType1Font.COURIER_BOLD, 20);
+                    content.drawString("Results");
+                    content.moveTextPositionByAmount(0, -10);
                     content.setFont(font, 14);
                     content.moveTextPositionByAmount(10, -14);
+                    content.drawString("RPM: " + String.valueOf(mainDataEntry.getRpmconveyor34()));
+                    content.moveTextPositionByAmount(0, -14);
                     content.drawString("Coeff. friction: " + mainDataEntry.getRadiananswer25f());
                     content.moveTextPositionByAmount(0, -14);
                     content.drawString("Total belt pull Kgf  : " + mainDataEntry.getBeltloadanswer13f());
                     content.moveTextPositionByAmount(0, -14);
-                    content.drawString("Nm torque  : " + mainDataEntry.getNmanswer15f());
+                    content.drawString("Nm Torque  : " + mainDataEntry.getNmanswer15f());
                     content.moveTextPositionByAmount(0, -14);
                     content.drawString("Service Factor  : " + mainDataEntry.getServicefactor17f());
                     content.moveTextPositionByAmount(0, -14);
                     content.drawString("Design Kw  : " + mainDataEntry.getDesignkwanswer18f());
                     //grabbing the values in the selected variables and positions them
 
+                //TODO: Gearbox recommendations 
+                    
                     content.endText();
-                    image2 = ImageIO.read(new File("John Brooks logo - New Globe - Industral automationresized.jpg"));
+                    image2 = ImageIO.read(new File("logosmall.jpg"));
                     BufferedImage logo = image2;
                     // writes the image to the file
                     
                     PDXObjectImage jblogo = new PDPixelMap(doc, logo);
 
-                    content.drawImage(jblogo, 20, 710);
+                    content.drawImage(jblogo, 20, 650);
                     //postions image
                     content.close();
-                    doc.save(Filename+(".pdf"));
+                    doc.getDocument();
+                    doc.save(myfile.getAbsolutePath());
+                    
+                    // open the file 
+                    Desktop.getDesktop().open(myfile);
+                    
                     doc.close();
                     close();
                     //saves pdf and closes it
-                } catch (Exception ie) {
-                    System.out.println(ie);
+                } catch (IOException | COSVisitorException ie) {
+                    JOptionPane.showMessageDialog(null, ie.getMessage(), "Error!", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         }
     }
+    
+    private String GetCurrentDate()
+    {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        
+        return dateFormat.format(date);
+    }
 
+    //<editor-fold defaultstate="collapsed" desc="getters">
     public String getdate() {
         return Date;
     }
@@ -431,9 +348,7 @@ public class SalesInfo extends javax.swing.JFrame {
     public String getProjectName() {
         return ProjectName;
     }
-
-   //get statements
-
+    //</editor-fold>
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField ClientnameInput;

@@ -3,6 +3,7 @@
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -41,12 +42,12 @@
                       </Group>
                       <EmptySpace pref="49" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="DateInput" pref="94" max="32767" attributes="0"/>
-                          <Component id="SalesmenInput" max="32767" attributes="0"/>
-                          <Component id="ClientnameInput" max="32767" attributes="0"/>
-                          <Component id="ProjectNameInput" max="32767" attributes="0"/>
+                          <Component id="DateInput" min="-2" pref="94" max="-2" attributes="0"/>
+                          <Component id="ClientnameInput" pref="177" max="32767" attributes="0"/>
+                          <Component id="SalesmenInput" alignment="0" max="32767" attributes="0"/>
+                          <Component id="ProjectNameInput" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="146" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
@@ -91,7 +92,9 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="Save">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Save"/>
+        <Property name="text" type="java.lang.String" value="Generate PDF"/>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
+        <Property name="actionCommand" type="java.lang.String" value=""/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SaveActionPerformed"/>
@@ -101,9 +104,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Name"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SalesmenInputActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
@@ -121,9 +121,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="DateInput">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="dd/mm/yyyy"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
