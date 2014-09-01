@@ -282,7 +282,7 @@ public class SalesInfo extends javax.swing.JFrame {
                     content.moveTextPositionByAmount(0, -10);
                     content.setFont(font, 14);
                     content.moveTextPositionByAmount(10, -14);
-                    content.drawString("RPM: " + String.valueOf(mainDataEntry.getRpmconveyor34()));
+                    content.drawString("RPM: " + String.format("%.2f",mainDataEntry.getRpmconveyor34()));
                     content.moveTextPositionByAmount(0, -14);
                     content.drawString("Coeff. friction: " + mainDataEntry.getRadiananswer25f());
                     content.moveTextPositionByAmount(0, -14);

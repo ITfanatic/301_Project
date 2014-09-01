@@ -109,11 +109,9 @@ public class GearBoxDatabaseConnection
         }
     }
 
-    public ArrayList GetBrooksCycloOptions()
+    public ArrayList GetBrooksCycloOptions(double kwInput, double rpm)
     {
         ArrayList<String> options = new ArrayList();
-
-        //double dbKilloWatt = DetermineDBKilloWattForWormBox(kwInput);
 
         try
         {
@@ -121,15 +119,17 @@ public class GearBoxDatabaseConnection
             try (Connection sqlCon = DriverManager.getConnection(url))
             {
                 java.sql.Statement st = sqlCon.createStatement();
-                // String selectOptions = String.format("SELECT Size, Inches FROM Wormbox WHERE KWInput=%.2f and RPM >= %.1f and Torque >= %.2f", dbKilloWatt, rpm, torque);
-                ResultSet res = st.executeQuery("SELECT * FROM Brookscyclo WHERE ID=1");
+                String selectOptions = String.format("SELECT Gearbox, Ratio, ServiceFactor, KWInput FROM BROOKSCYCLO WHERE KWInput>=%.2f and RPM >= %.1f", kwInput, rpm);
+                ResultSet res = st.executeQuery(selectOptions);
                 
                 while (res.next())
                 {
-//                int motorSize = res.getInt("Size");
-//                double gearboxRatio = res.getDouble("Inches");
-//                options.add(String.format("%.2fKw 4P Motor \nFCNDK %d %.2f:1", dbKilloWatt, motorSize, gearboxRatio));
-                    options.add(res.getString("Gearbox"));
+                    String gearbox = res.getString("Gearbox");
+                    double serviceFactor = res.getDouble("ServiceFactor");                    
+                    int gearboxRatio = res.getInt("Ratio");
+                    double dbMotorKw = res.getDouble("KWInput");
+                    
+                    options.add(String.format("Gearbox: %s \n Service Factor: %.2f Ratio: %d \n %.2fKw 4P Motor", gearbox, serviceFactor, gearboxRatio, dbMotorKw));
                 }
             }
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e)

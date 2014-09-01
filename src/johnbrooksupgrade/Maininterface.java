@@ -1403,7 +1403,7 @@ public class Maininterface extends javax.swing.JFrame
         try
         {
             GearBoxDatabaseConnection database = new GearBoxDatabaseConnection();
-            ArrayList<String> options = database.GetBrooksCycloOptions();
+            ArrayList<String> options = database.GetBrooksCycloOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()));
             String results = "";
             int matchNumber = 0;
             
