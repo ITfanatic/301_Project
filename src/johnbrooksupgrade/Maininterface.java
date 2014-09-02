@@ -1357,10 +1357,10 @@ public class Maininterface extends javax.swing.JFrame
                         break;
                     }
 
-                    results += String.format("\n%d. %s\n", matchNumber, option);
+                    results += String.format("%d. %s\n\n", matchNumber, option);
                 }
 
-                GearboxOptionsOutput.setText(results);
+                GearboxOptionsOutput.setText(results.trim());//trim to get rid of the trailing newlines
             }
             else
             {
@@ -1403,7 +1403,7 @@ public class Maininterface extends javax.swing.JFrame
         try
         {
             GearBoxDatabaseConnection database = new GearBoxDatabaseConnection();
-            ArrayList<String> options = database.GetBrooksCycloOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()));
+            ArrayList<String> options = database.GetBrooksCycloOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
             String results = "";
             int matchNumber = 0;
             
@@ -1423,7 +1423,7 @@ public class Maininterface extends javax.swing.JFrame
                     results += String.format("%d. %s\n\n", matchNumber, option);
                 }
                 
-                GearboxOptionsOutput.setText(results);
+                GearboxOptionsOutput.setText(results.trim());//trim to get rid of the trailing newlines
             } 
             else
             {
