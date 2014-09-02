@@ -125,7 +125,7 @@ public class GearBoxDatabaseConnection
                
                     Because we only display the first two matches we want to order the query results by KW so that the two options 
                     suggested are the smallest but still fit for purpose */                
-                String selectOptions = String.format("SELECT Gearbox, Ratio, ServiceFactor, KWInput FROM BROOKSCYCLO WHERE KWInput >=%.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput", kwInput, rpm, torque);
+                String selectOptions = String.format("SELECT Gearbox, Ratio, ServiceFactor, KWInput, ServiceFactorOverload FROM BROOKSCYCLO WHERE KWInput >=%.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput", kwInput, rpm, torque);
                 ResultSet res = st.executeQuery(selectOptions);
                 
                 while (res.next())
@@ -134,8 +134,16 @@ public class GearBoxDatabaseConnection
                     double serviceFactor = res.getDouble("ServiceFactor");                    
                     int gearboxRatio = res.getInt("Ratio");
                     double dbMotorKw = res.getDouble("KWInput");
-                    
-                    options.add(String.format("Gearbox: %s \n Service Factor: %.2f Ratio: %d \n %.2fKw 4P Motor", gearbox, serviceFactor, gearboxRatio, dbMotorKw));
+                    boolean serviceFactorOverload = res.getBoolean("ServiceFactorOverload");
+
+                    if(serviceFactorOverload)
+                    {
+                        options.add(String.format("Gearbox: %s \n Service Factor: %.2f Ratio: %d \n %.2fKw 4P Motor\nOverload may occur if this motor is\nloaded to its full KW.", gearbox, serviceFactor, gearboxRatio, dbMotorKw));
+                    }
+                    else
+                    {
+                        options.add(String.format("Gearbox: %s \n Service Factor: %.2f Ratio: %d \n %.2fKw 4P Motor", gearbox, serviceFactor, gearboxRatio, dbMotorKw));
+                    }
                 }
             }
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e)
@@ -237,7 +245,7 @@ public class GearBoxDatabaseConnection
                         + "Gearbox varchar(25) NOT NULL,"
                         + "Ratio int NOT NULL,"
                         + "ServiceFactor decimal(4,2) NOT NULL,"
-                        + "ServiceFactorOverload bit NOT NULL"
+                        + "ServiceFactorOverload BOOLEAN NOT NULL"
                         + ")";
 
                 st.executeUpdate(createTable);
