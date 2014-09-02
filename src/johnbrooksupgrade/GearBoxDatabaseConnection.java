@@ -33,7 +33,7 @@ public class GearBoxDatabaseConnection
             try (Connection sqlCon = DriverManager.getConnection(url))
             {
                 java.sql.Statement st = sqlCon.createStatement();
-                String selectOptions = String.format("SELECT Size, Inches FROM Wormbox WHERE KWInput=%.2f and RPM >= %.1f and Torque >= %.2f", dbKilloWatt, rpm, torque);
+                String selectOptions = String.format("SELECT Size, Inches FROM Wormbox WHERE KWInput=%.2f and RPM >= %.1f and Torque >= %.2f ORDER BY Size", dbKilloWatt, rpm, torque);
                                 
                 ResultSet res = st.executeQuery(selectOptions);
                 
@@ -109,7 +109,7 @@ public class GearBoxDatabaseConnection
         }
     }
 
-    public ArrayList GetBrooksCycloOptions(double kwInput, double rpm)
+    public ArrayList GetBrooksCycloOptions(double kwInput, double rpm, double torque)
     {
         ArrayList<String> options = new ArrayList();
 
@@ -119,7 +119,13 @@ public class GearBoxDatabaseConnection
             try (Connection sqlCon = DriverManager.getConnection(url))
             {
                 java.sql.Statement st = sqlCon.createStatement();
-                String selectOptions = String.format("SELECT Gearbox, Ratio, ServiceFactor, KWInput FROM BROOKSCYCLO WHERE KWInput>=%.2f and RPM >= %.1f", kwInput, rpm);
+                
+                 /* The thinking behind this query is that we get the columns we need based on the gearbox/motor 
+                    being able to handle (greater than or equal to) the kwinput, rpm, and torque results determined by the conveyor's specs.
+               
+                    Because we only display the first two matches we want to order the query results by KW so that the two options 
+                    suggested are the smallest but still fit for purpose */                
+                String selectOptions = String.format("SELECT Gearbox, Ratio, ServiceFactor, KWInput, ServiceFactorOverload FROM BROOKSCYCLO WHERE KWInput >=%.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput", kwInput, rpm, torque);
                 ResultSet res = st.executeQuery(selectOptions);
                 
                 while (res.next())
@@ -128,8 +134,16 @@ public class GearBoxDatabaseConnection
                     double serviceFactor = res.getDouble("ServiceFactor");                    
                     int gearboxRatio = res.getInt("Ratio");
                     double dbMotorKw = res.getDouble("KWInput");
-                    
-                    options.add(String.format("Gearbox: %s \n Service Factor: %.2f Ratio: %d \n %.2fKw 4P Motor", gearbox, serviceFactor, gearboxRatio, dbMotorKw));
+                    boolean serviceFactorOverload = res.getBoolean("ServiceFactorOverload");
+
+                    if(serviceFactorOverload)
+                    {
+                        options.add(String.format("Gearbox: %s \n Service Factor: %.2f Ratio: %d \n %.2fKw 4P Motor\nOverload may occur if this motor is\nloaded to its full KW.", gearbox, serviceFactor, gearboxRatio, dbMotorKw));
+                    }
+                    else
+                    {
+                        options.add(String.format("Gearbox: %s \n Service Factor: %.2f Ratio: %d \n %.2fKw 4P Motor", gearbox, serviceFactor, gearboxRatio, dbMotorKw));
+                    }
                 }
             }
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e)
@@ -227,10 +241,11 @@ public class GearBoxDatabaseConnection
                         + "CONSTRAINT PK_Brookscyclo PRIMARY KEY (ID),"
                         + "KWInput decimal(4,2) NOT NULL,"
                         + "RPM decimal(4,1) NOT NULL,"
-                        + "Torque decimal(7,2) NOT NULL,"
+                        + "Torque decimal(8,2) NOT NULL,"
                         + "Gearbox varchar(25) NOT NULL,"
                         + "Ratio int NOT NULL,"
-                        + "ServiceFactor decimal(4,2) NOT NULL"
+                        + "ServiceFactor decimal(4,2) NOT NULL,"
+                        + "ServiceFactorOverload BOOLEAN NOT NULL"
                         + ")";
 
                 st.executeUpdate(createTable);

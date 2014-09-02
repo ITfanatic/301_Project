@@ -675,13 +675,20 @@ public class Maininterface extends javax.swing.JFrame
                                                             .addComponent(Widthofconveyorinput, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                             .addGap(18, 18, 18)
                                                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(jBWormBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jBBrooksCyclo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jBBevelHelical, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                    .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jBBrooksCyclo, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jBBevelHelical, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jBWormBox, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                 .addGap(18, 18, 18)
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                        .addGap(107, 107, 107)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                            .addComponent(dbProcessing)
+                                                            .addComponent(powerLbl))
+                                                        .addGap(157, 157, 157))))))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(16, 16, 16)
                                         .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -711,13 +718,7 @@ public class Maininterface extends javax.swing.JFrame
                                 .addComponent(jBQuit, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Kgsatanygiventimeoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(dbProcessing)
-                            .addComponent(powerLbl))
-                        .addGap(268, 268, 268))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Beltweightinput, Servicefactorinput, Widthofconveyorinput});
@@ -865,35 +866,36 @@ public class Maininterface extends javax.swing.JFrame
                         .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel26)
-                                .addGap(11, 11, 11)
-                                .addComponent(jLabel25))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel24))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(Nmoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(4, 4, 4)
-                                .addComponent(Kwoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(Kwoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel26)
+                                .addGap(11, 11, 11)
+                                .addComponent(jLabel25)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jBQuit)
                             .addComponent(jBReset)
                             .addComponent(jButton1)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dbProcessing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(dbProcessing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(117, 117, 117))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(13, 13, 13)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jBWormBox)
                                 .addGap(18, 18, 18)
                                 .addComponent(jBBrooksCyclo)
                                 .addGap(18, 18, 18)
-                                .addComponent(jBBevelHelical))
-                            .addComponent(jScrollPane1))))
+                                .addComponent(jBBevelHelical)))))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
 
@@ -1357,10 +1359,10 @@ public class Maininterface extends javax.swing.JFrame
                         break;
                     }
 
-                    results += String.format("\n%d. %s\n", matchNumber, option);
+                    results += String.format("%d. %s\n\n", matchNumber, option);
                 }
 
-                GearboxOptionsOutput.setText(results);
+                GearboxOptionsOutput.setText(results.trim());//trim to get rid of the trailing newlines
             }
             else
             {
@@ -1403,7 +1405,7 @@ public class Maininterface extends javax.swing.JFrame
         try
         {
             GearBoxDatabaseConnection database = new GearBoxDatabaseConnection();
-            ArrayList<String> options = database.GetBrooksCycloOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()));
+            ArrayList<String> options = database.GetBrooksCycloOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
             String results = "";
             int matchNumber = 0;
             
@@ -1423,7 +1425,7 @@ public class Maininterface extends javax.swing.JFrame
                     results += String.format("%d. %s\n\n", matchNumber, option);
                 }
                 
-                GearboxOptionsOutput.setText(results);
+                GearboxOptionsOutput.setText(results.trim());//trim to get rid of the trailing newlines
             } 
             else
             {
