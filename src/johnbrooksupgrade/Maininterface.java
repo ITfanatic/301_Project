@@ -72,6 +72,7 @@ public class Maininterface extends javax.swing.JFrame
     protected double Rpmconveyor34;
     protected String Rpmconveyor35;
     private boolean isDiscreet;
+    public ArrayList<String> GearboxDetailsForPDF = new ArrayList<String>();
     // </editor-fold>
 
     //Referencing Salesinfo class
@@ -1343,6 +1344,7 @@ public class Maininterface extends javax.swing.JFrame
             GearBoxDatabaseConnection database = new GearBoxDatabaseConnection();
             ArrayList<String> options = database.GetWormBoxOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
             String results = "";
+            
             int matchNumber = 0;
 
             if (!options.isEmpty())
@@ -1363,6 +1365,7 @@ public class Maininterface extends javax.swing.JFrame
                 }
 
                 GearboxOptionsOutput.setText(results.trim());//trim to get rid of the trailing newlines
+                GearboxDetailsForPDF = options;
             }
             else
             {
@@ -1426,6 +1429,7 @@ public class Maininterface extends javax.swing.JFrame
                 }
                 
                 GearboxOptionsOutput.setText(results.trim());//trim to get rid of the trailing newlines
+                GearboxDetailsForPDF = options;
             } 
             else
             {
@@ -1440,7 +1444,39 @@ public class Maininterface extends javax.swing.JFrame
 
     private void jBBevelHelicalActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jBBevelHelicalActionPerformed
     {//GEN-HEADEREND:event_jBBevelHelicalActionPerformed
-        JOptionPane.showMessageDialog(null, "Coming Soon!", "Under Construction", JOptionPane.INFORMATION_MESSAGE);
+        try
+        {
+            GearBoxDatabaseConnection database = new GearBoxDatabaseConnection();
+            ArrayList<String> options = database.GetBevelHelicalOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
+            String results = "";
+            int matchNumber = 0;
+
+            if (!options.isEmpty())
+            {
+                for (String option : options)
+                {
+                    matchNumber += 1;
+
+                    // we only want to display the first two options
+                    // so once the match number is 2, we've got two options 
+                    if (matchNumber > 2)
+                    {
+                        break;
+                    }
+
+                    results += String.format("%d. %s\n\n", matchNumber, option);
+                }
+
+                GearboxOptionsOutput.setText(results.trim());//trim to get rid of the trailing newlines
+                GearboxDetailsForPDF = options;
+            } else
+            {
+                JOptionPane.showMessageDialog(null, "No matches were found for the calculated results.", "No Matches", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NumberFormatException | HeadlessException e)
+        {
+            InfoBox(e.getMessage());
+        }
     }//GEN-LAST:event_jBBevelHelicalActionPerformed
 
     @Override
@@ -1488,8 +1524,10 @@ public class Maininterface extends javax.swing.JFrame
             jLRpm.setText("Rpm");
             jLRpm.setForeground(Color.black);
 
-            //because the rpm has been entered manually in order to execute this method, we need to assign the rpm input text to the result field
+            // The rpm has been entered manually, so we need to assign the rpm input text to the result field 
+            // and the double used to calculate KW later on.
             rpmResultsOutput.setText(Rpminput.getText());
+            Rpmconveyor34 = Rpmoutput20;
 
         }
     }

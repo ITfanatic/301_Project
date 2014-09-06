@@ -154,10 +154,45 @@ public class GearBoxDatabaseConnection
         return options;
     }
     
+    public ArrayList GetBevelHelicalOptions(double kwInput, double rpm, double torque)
+    {
+        ArrayList<String> options = new ArrayList();
+
+        try
+        {
+            
+            Class.forName(driver).newInstance();
+            try (Connection sqlCon = DriverManager.getConnection(url))
+            {
+                java.sql.Statement st = sqlCon.createStatement();
+                String selectOptions = String.format("SELECT Size, Ratio, KWInput FROM BEVELHELICAL WHERE KWInput >= %.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput", kwInput, rpm, torque);
+                                
+                ResultSet res = st.executeQuery(selectOptions);
+                
+                while (res.next())
+                {
+                    String motorSize = res.getString("Size");
+                    double gearboxRatio = res.getDouble("Ratio");
+                    double KW = res.getDouble("KWInput");
+                    
+                    options.add(String.format("%.2fKw 4P Motor \n%s %.2f", KW, motorSize, gearboxRatio));
+                }
+            }
+            
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error!", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        return options;
+    }
+    
+    
     public void CreateTables()
     {
         CreateWormboxTable();
         CreateBrooksCycloTable();
+        CreateBevelHelicalTable();
     }
     
     private void CreateWormboxTable()
@@ -209,7 +244,7 @@ public class GearBoxDatabaseConnection
     
     private void CreateBrooksCycloTable()
     {
-         try
+        try
         {
             Class.forName(driver).newInstance();
             Connection sqlCon = DriverManager.getConnection(url);
@@ -220,7 +255,7 @@ public class GearBoxDatabaseConnection
                 // this is just a check to see if the table exists
                 // hence getting one record is enough
                 ResultSet results = st.executeQuery("SELECT ID FROM Brookscyclo WHERE ID=1");
-                
+
                 if (!results.next())
                 {
                     // this is pretty much just a fail safe for if some how the records weren't
@@ -252,8 +287,7 @@ public class GearBoxDatabaseConnection
 
                 String insertRecords = "CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (null, 'BROOKSCYCLO', 'Brookscyclo.csv', null, null, null,0)";
                 st.executeUpdate(insertRecords);
-            }
-            finally
+            } finally
             {
                 sqlCon.close();
             }
@@ -261,6 +295,60 @@ public class GearBoxDatabaseConnection
         catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e)
         {
             JOptionPane.showMessageDialog(null, "Error creating Brooks Cyclo table | Details: \n" + e.getMessage(), "Error!", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void CreateBevelHelicalTable()
+    {
+        try
+        {
+            Class.forName(driver).newInstance();
+            Connection sqlCon = DriverManager.getConnection(url);
+            java.sql.Statement st = sqlCon.createStatement();
+
+            try
+            {
+                // this is just a check to see if the table exists
+                // hence getting one record is enough
+                ResultSet results = st.executeQuery("SELECT ID FROM BEVELHELICAL WHERE ID=1");
+
+                if (!results.next())
+                {
+                    // this is pretty much just a fail safe for if some how the records weren't
+                    // inserted when the table was created. This won't be executed if the 
+                    // above select throws an exception.
+                    String insertRecords = "CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (null, 'BEVELHELICAL', 'BevelHelical.csv', null, null, null,0)";
+                    st.executeUpdate(insertRecords);
+                }
+            } 
+            catch (SQLException e)
+            {
+
+                // If the select throws an exception it means we haven't created
+                // the table yet, so create the table and insert the records.
+                String createTable = "CREATE TABLE BEVELHELICAL"
+                        + "("
+                        + "ID int NOT NULL,"
+                        + "CONSTRAINT PK_BEVELHELICAL PRIMARY KEY (ID),"
+                        + "KWInput decimal(4,2) NOT NULL,"
+                        + "RPM decimal(4,1) NOT NULL,"
+                        + "Torque decimal(7,2) NOT NULL,"
+                        + "Size varchar(5) NOT NULL,"
+                        + "Ratio decimal(4,1) NOT NULL"
+                        + ")";
+
+                st.executeUpdate(createTable);
+
+                String insertRecords = "CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (null, 'BEVELHELICAL', 'BevelHelical.csv', null, null, null,0)";
+                st.executeUpdate(insertRecords);
+            } finally
+            {
+                sqlCon.close();
+            }
+        } 
+        catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e)
+        {
+            JOptionPane.showMessageDialog(null, "Error creating Bevel Helical table | Details: \n" + e.getMessage(), "Error!", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }
