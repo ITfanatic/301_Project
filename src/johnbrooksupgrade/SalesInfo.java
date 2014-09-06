@@ -343,10 +343,10 @@ public class SalesInfo extends javax.swing.JFrame {
                         {
                             display = mainDataEntry.GearboxDetailsForPDF.get(1).split("Ratio: |Overload ");
                             
-                            content.moveTextPositionByAmount(0, -20);
 
                             if (display.length > 1)
                             {
+                                content.moveTextPositionByAmount(0, -15);
                                 display[1] = "Ratio: " + display[1];
                                 content.drawString(display[0]);
                                 content.moveTextPositionByAmount(0, -14);
