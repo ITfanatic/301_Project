@@ -293,11 +293,82 @@ public class SalesInfo extends javax.swing.JFrame {
                     content.drawString("Service Factor: " + mainDataEntry.getServicefactor17f());
                     content.moveTextPositionByAmount(0, -14);
                     content.drawString("Design Kw: " + mainDataEntry.getDesignkwanswer18f());
-                    //grabbing the values in the selected variables and positions them
+                    content.moveTextPositionByAmount(-10, -28);
 
-                //TODO: Gearbox recommendations 
-                    
+
+                // Gearbox recommendations 
+                                        
+                    // only bother with section if the gearbox details aren't empty
+                    if (!mainDataEntry.GearboxDetailsForPDF.isEmpty())
+                    {
+                        content.setFont(PDType1Font.COURIER_BOLD, 20);
+                        content.drawString("Gearbox/Motor Recommendations");
+                        content.moveTextPositionByAmount(0, -10);
+                        content.setFont(font, 14);
+                        content.moveTextPositionByAmount(10, -14);
+                        
+                        String[] display;
+                        
+                        // For the brooks cyclo we need to split the string by these values
+                        // then write each index of the resulting array separately so the
+                        // result doesn't just run off the page
+                        display = mainDataEntry.GearboxDetailsForPDF.get(0).split("Ratio: |Overload ");
+                        
+                        // Only need to do this when the string has been split out by Ratio or Overload
+                        // i.e. this is only the case for brooks cyclo, the other two types fit the page fine
+                        if (display.length > 1)
+                        {
+                            display[1] = "Ratio: " + display[1];
+                            content.drawString(display[0]);
+                            content.moveTextPositionByAmount(0, -14);
+                            content.drawString(display[1]);
+                            
+                            if(display.length > 2)
+                            {
+                                display[2] = "Overload " + display[2];
+                                content.moveTextPositionByAmount(0, -14);
+                                content.drawString(display[2]);     
+                            }
+                        }
+                        else
+                        {
+                            // first option must exist for the program to get this far
+                            content.drawString(mainDataEntry.GearboxDetailsForPDF.get(0));
+                        }
+                        
+                        content.moveTextPositionByAmount(0, -14);
+
+                        // only bother with the second option if it exists
+                        if (mainDataEntry.GearboxDetailsForPDF.size() > 1)
+                        {
+                            display = mainDataEntry.GearboxDetailsForPDF.get(1).split("Ratio: |Overload ");
+                            
+
+                            if (display.length > 1)
+                            {
+                                content.moveTextPositionByAmount(0, -15);
+                                display[1] = "Ratio: " + display[1];
+                                content.drawString(display[0]);
+                                content.moveTextPositionByAmount(0, -14);
+                                content.drawString(display[1]);
+
+                                if (display.length > 2)
+                                {
+                                    display[2] = "Overload " + display[2];
+                                    content.moveTextPositionByAmount(0, -14);
+                                    content.drawString(display[2]);
+                                }
+                            } 
+                            else
+                            {
+                                content.moveTextPositionByAmount(0, -14);
+                                content.drawString(mainDataEntry.GearboxDetailsForPDF.get(1));
+                            }
+                        }
+                    }
+                   
                     content.endText();
+                    
                     image2 = ImageIO.read(new File("logosmall.jpg"));
                     BufferedImage logo = image2;
                     // writes the image to the file
