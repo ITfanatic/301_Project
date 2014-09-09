@@ -26,7 +26,7 @@ import org.apache.pdfbox.pdmodel.graphics.xobject.PDPixelMap;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 //import classes for functionality
 
-public class SalesInfo extends javax.swing.JFrame {
+public class PDFService extends javax.swing.JFrame {
 
     protected String Filename;
     protected String Salesmen;
@@ -41,7 +41,7 @@ public class SalesInfo extends javax.swing.JFrame {
     /**
      * @param mainDataEntryIn
      */
-    public SalesInfo(Maininterface mainDataEntryIn) {   
+    public PDFService(Maininterface mainDataEntryIn) {   
         // This class constructor requires the calling class to pass a reference to itself.
         // That will allow each new instance of SalesInfo to know who called it.
         // Here, we call that calling class "mainDataEntry".
@@ -214,12 +214,6 @@ public class SalesInfo extends javax.swing.JFrame {
         //error message box if they don't select a branch
         if (Branch != null) {
             
-//            JFileChooser chooser = new JFileChooser();
-//            FileNameExtensionFilter myfilter = new FileNameExtensionFilter("PDF FILE", "pdf");
-//            chooser.addChoosableFileFilter(myfilter);
-//            chooser.setAcceptAllFileFilterUsed(false);
-//            chooser.showSaveDialog(null);
-            
             //We want to save the file to Windows' temporary files folder so it can be loaded from there straight away
             //This temporary file is deleted when the program is exited
             File myfile = new File("C:\\Windows\\Temp\\ConveyorFile.pdf");
@@ -261,9 +255,9 @@ public class SalesInfo extends javax.swing.JFrame {
                     content.moveTextPositionByAmount(0, -10);
                     content.setFont(font, 14);
                     content.moveTextPositionByAmount(10, -14);
-                    content.drawString("Speed of Belt M/pm: " + mainDataEntry.getSpeedofbeltanswer29f());
+                    content.drawString("Speed of Belt M/pm: " + mainDataEntry.Speedofbeltanswer29f);
                     content.moveTextPositionByAmount(0, -14);
-                    content.drawString("Overall Circumference : " + mainDataEntry.getCircumferenceanswer2f());
+                    content.drawString("Drum/Sprocket Ø Mtrs: " + String.format("%.2f",mainDataEntry.Drumdiameterinput1));
                     content.moveTextPositionByAmount(0, -14);
                     content.drawString("Metres per minute: " + mainDataEntry.getMetresperminuteanswer4f());
                     content.moveTextPositionByAmount(0, -14);
@@ -284,7 +278,7 @@ public class SalesInfo extends javax.swing.JFrame {
                     content.moveTextPositionByAmount(10, -14);
                     content.drawString("RPM: " + String.format("%.2f",mainDataEntry.getRpmconveyor34()));
                     content.moveTextPositionByAmount(0, -14);
-                    content.drawString("Coeff. friction: " + mainDataEntry.getRadiananswer25f());
+                    content.drawString("Application Factor: " + mainDataEntry.getRadiananswer25f());
                     content.moveTextPositionByAmount(0, -14);
                     content.drawString("Total belt pull Kgf: " + mainDataEntry.getBeltloadanswer13f());
                     content.moveTextPositionByAmount(0, -14);
@@ -303,9 +297,11 @@ public class SalesInfo extends javax.swing.JFrame {
                     {
                         content.setFont(PDType1Font.COURIER_BOLD, 20);
                         content.drawString("Gearbox/Motor Recommendations");
-                        content.moveTextPositionByAmount(0, -10);
+                        content.moveTextPositionByAmount(2, -25);
+                        content.setFont(PDType1Font.COURIER_BOLD, 18);
+                        content.drawString(mainDataEntry.GearboxType + ":");
                         content.setFont(font, 14);
-                        content.moveTextPositionByAmount(10, -14);
+                        content.moveTextPositionByAmount(10, -25);
                         
                         String[] display;
                         
