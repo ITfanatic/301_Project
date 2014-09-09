@@ -33,6 +33,8 @@ public class Maininterface extends javax.swing.JFrame
     protected String Servicefactor17f;
     protected String Speedofbeltanswer29f;
     protected String Loadperhourcontiniousoutput30f;
+    protected ArrayList<String> GearboxDetailsForPDF = new ArrayList<String>();   
+    protected String GearboxType;
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="calculation vars">
@@ -72,11 +74,10 @@ public class Maininterface extends javax.swing.JFrame
     protected double Rpmconveyor34;
     protected String Rpmconveyor35;
     private boolean isDiscreet;
-    public ArrayList<String> GearboxDetailsForPDF = new ArrayList<String>();
     // </editor-fold>
 
     //Referencing Salesinfo class
-    private final SalesInfo save;
+    private final PDFService save;
     //This is used so we can collect the error messages for each error and display them in one message box 
     private ArrayList<String> errorMessages = new ArrayList<>();
 
@@ -84,7 +85,7 @@ public class Maininterface extends javax.swing.JFrame
     {
         initComponents();
 
-        save = new SalesInfo(this);
+        save = new PDFService(this);
     }
 
     @SuppressWarnings("unchecked")
@@ -164,6 +165,8 @@ public class Maininterface extends javax.swing.JFrame
         GearboxOptionsOutput = new javax.swing.JTextArea();
         jLabel31 = new javax.swing.JLabel();
         dbProcessing = new javax.swing.JLabel();
+        jBHelical = new javax.swing.JButton();
+        jBKCWormbox = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -445,7 +448,7 @@ public class Maininterface extends javax.swing.JFrame
         jLabel6.setText("Torque");
 
         jLabel14.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
-        jLabel14.setText("Total design Load");
+        jLabel14.setText("Total Belt Pull");
 
         jLabel20.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel20.setText("Kg'f");
@@ -496,7 +499,7 @@ public class Maininterface extends javax.swing.JFrame
         loadContinuousLbl.setEnabled(false);
 
         jLabel27.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
-        jLabel27.setText("Coeff. Friction");
+        jLabel27.setText("App Factor");
 
         jLabel28.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel28.setText("Results:");
@@ -520,7 +523,7 @@ public class Maininterface extends javax.swing.JFrame
         });
 
         jBBevelHelical.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
-        jBBevelHelical.setText("Bevel/Helical");
+        jBBevelHelical.setText("Tramec Bevel/Helical");
         jBBevelHelical.setToolTipText("");
         jBBevelHelical.setActionCommand("");
         jBBevelHelical.addActionListener(new java.awt.event.ActionListener()
@@ -562,6 +565,30 @@ public class Maininterface extends javax.swing.JFrame
 
         dbProcessing.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         dbProcessing.setText(" ");
+
+        jBHelical.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jBHelical.setText("Tramec Helical");
+        jBHelical.setToolTipText("");
+        jBHelical.setActionCommand("");
+        jBHelical.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jBHelicalActionPerformed(evt);
+            }
+        });
+
+        jBKCWormbox.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jBKCWormbox.setText("Tramec KC WormBox");
+        jBKCWormbox.setToolTipText("");
+        jBKCWormbox.setActionCommand("");
+        jBKCWormbox.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jBKCWormboxActionPerformed(evt);
+            }
+        });
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -573,36 +600,6 @@ public class Maininterface extends javax.swing.JFrame
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jlLengh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jlSpacing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jweightofunit, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(loadContinuousLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jlunitsperhour, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(Weightofunitinput, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(Spacinginput, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(Lengthinput, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(Unithourinput, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(7, 7, 7)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jlLengthMetres, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jlSpacingMetress, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(weightofunitlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(Loadperhourcontiniousoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jcdeiscret))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel28)
-                            .addComponent(other, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -652,19 +649,19 @@ public class Maininterface extends javax.swing.JFrame
                                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                                 .addComponent(Angleinput, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                                    .addGroup(layout.createSequentialGroup()
+                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                                                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                         .addComponent(Beltweightinput, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE))
-                                                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                                                        .addComponent(jLabel10)
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                        .addComponent(Servicefactorinput, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE))
-                                                                    .addGroup(layout.createSequentialGroup()
-                                                                        .addComponent(jLabel27)
-                                                                        .addGap(47, 47, 47)
-                                                                        .addComponent(Applicationfactoranswer, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                            .addComponent(jLabel27)
+                                                                            .addComponent(jLabel10))
+                                                                        .addGap(33, 33, 33)
+                                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                            .addComponent(Servicefactorinput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                                                                            .addComponent(Applicationfactoranswer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                                             .addGap(18, 18, 18)
                                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                                 .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -679,20 +676,24 @@ public class Maininterface extends javax.swing.JFrame
                                                     .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(jBBrooksCyclo, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jBBevelHelical, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jBWormBox, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                        .addComponent(jBBevelHelical, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(jBWormBox, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jBKCWormbox, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jBHelical, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addGap(18, 18, 18)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                        .addGap(107, 107, 107)
+                                                        .addGap(14, 14, 14)
                                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                             .addComponent(dbProcessing)
                                                             .addComponent(powerLbl))
-                                                        .addGap(157, 157, 157))))))
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))))))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(16, 16, 16)
                                         .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel28)
+                            .addComponent(other, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel14)
@@ -717,9 +718,34 @@ public class Maininterface extends javax.swing.JFrame
                                 .addComponent(jButton1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jBQuit, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(Kgsatanygiventimeoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jcdeiscret)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jlLengh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jlSpacing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jweightofunit, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(loadContinuousLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlunitsperhour, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Kgsatanygiventimeoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(Weightofunitinput, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Spacinginput, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Lengthinput, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Unithourinput, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(7, 7, 7)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jlLengthMetres, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 224, Short.MAX_VALUE)
+                                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jlSpacingMetress, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(weightofunitlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(Loadperhourcontiniousoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Beltweightinput, Servicefactorinput, Widthofconveyorinput});
@@ -771,7 +797,7 @@ public class Maininterface extends javax.swing.JFrame
                     .addComponent(Loadperhourcontiniousoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(151, 151, 151)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(Kgsatanygiventimeoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -849,55 +875,62 @@ public class Maininterface extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(other, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)
-                        .addComponent(jLabel28)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel29)
-                                .addComponent(jLabel30))
-                            .addComponent(rpmResultsOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(Beltloadoutput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel14))
-                        .addGap(13, 13, 13)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel24))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(Nmoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(4, 4, 4)
-                                .addComponent(Kwoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel26)
-                                .addGap(11, 11, 11)
-                                .addComponent(jLabel25)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jBQuit)
-                            .addComponent(jBReset)
-                            .addComponent(jButton1)))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(dbProcessing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(117, 117, 117))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(13, 13, 13)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(other, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jBWormBox)
-                                .addGap(18, 18, 18)
-                                .addComponent(jBBrooksCyclo)
-                                .addGap(18, 18, 18)
-                                .addComponent(jBBevelHelical)))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                                .addGap(2, 2, 2)
+                                .addComponent(jLabel28)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel29)
+                                        .addComponent(jLabel30))
+                                    .addComponent(rpmResultsOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(Beltloadoutput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel14))
+                                .addGap(13, 13, 13)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel24))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(Nmoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(4, 4, 4)
+                                        .addComponent(Kwoutput, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel26)
+                                        .addGap(11, 11, 11)
+                                        .addComponent(jLabel25)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jBQuit)
+                                    .addComponent(jBReset)
+                                    .addComponent(jButton1)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jBWormBox)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jBBrooksCyclo)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jBBevelHelical)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jBHelical)
+                                        .addGap(13, 13, 13)
+                                        .addComponent(jBKCWormbox)))))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {Beltweightinput, Servicefactorinput, Widthofconveyorinput});
@@ -989,6 +1022,7 @@ public class Maininterface extends javax.swing.JFrame
                 CalculateTorque();
                 Designkw();
                 CalculateKgsAtAnyGivenTime();
+                GearboxOptionsOutput.setText("");
             }
         } 
         catch (Exception e)
@@ -1031,7 +1065,7 @@ public class Maininterface extends javax.swing.JFrame
             //gabbing inputs values and putting them into variables.
 
             Circumferenceanswer2 = Drumdiameterinput1 * 3.142;
-            Beltloadanswer13 = ((Lengthofconveyor6 * 2) + Circumferenceanswer2) * (Widthofconveyorinput11) * Beltweightinput12;
+            Beltloadanswer13 = ((((Lengthofconveyor6 * 2) + Circumferenceanswer2) * Widthofconveyorinput11 * Beltweightinput12) + Productonconveyor32) * Radiananswer25;
             //grabs inputed text puts it in a variable and does the math then outputs it to another variable
 
             String fstring = String.format("%.2f", Beltloadanswer13);
@@ -1059,9 +1093,10 @@ public class Maininterface extends javax.swing.JFrame
             Beltweightinput12 = Double.parseDouble(Beltweightinput.getText());
             //gabbing inputs values and putting them into variables.
 
-            Nmanswer15 = (Productonconveyor32 + Beltloadanswer13) * Radiananswer25 * ((Drumdiameterinput1 / 2)) * 10;
-            //grabs inputed text puts it in a variable and does the math then outputs it to another variable
+            //Nmanswer15 = (Productonconveyor32 + Beltloadanswer13) * Radiananswer25 * ((Drumdiameterinput1 / 2)) * 10;
+             Nmanswer15 = Beltloadanswer13 * (Drumdiameterinput1 / 2) * 9.81;
 
+            //grabs inputed text puts it in a variable and does the math then outputs it to another variable
             String fstring = String.format("%.2f", Nmanswer15);
             //makes it print to 2 decimal place and converting from a double to a string
             Nmanswer15f = (fstring);
@@ -1341,36 +1376,9 @@ public class Maininterface extends javax.swing.JFrame
     {//GEN-HEADEREND:event_jBWormBoxActionPerformed
         try
         {
-            GearBoxDatabaseConnection database = new GearBoxDatabaseConnection();
-            ArrayList<String> options = database.GetWormBoxOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
-            String results = "";
-            
-            int matchNumber = 0;
-
-            if (!options.isEmpty())
-            {
-
-                for (String option : options)
-                {
-                    matchNumber += 1;
-                    
-                    // we only want to display the first two options
-                    // so once the match number is 2, we've got two options 
-                    if (matchNumber > 2)
-                    {
-                        break;
-                    }
-
-                    results += String.format("%d. %s\n\n", matchNumber, option);
-                }
-
-                GearboxOptionsOutput.setText(results.trim());//trim to get rid of the trailing newlines
-                GearboxDetailsForPDF = options;
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "No matches were found for the calculated results.", "No Matches", JOptionPane.INFORMATION_MESSAGE);
-            }        
+            GearboxService gearboxService = new GearboxService();
+            ArrayList<String> options = gearboxService.GetWormBoxOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
+            OutputGearboxOptions(options, "Brooks Drive Wormbox");
         } 
         catch (NumberFormatException | HeadlessException e)
         {
@@ -1407,34 +1415,9 @@ public class Maininterface extends javax.swing.JFrame
     {//GEN-HEADEREND:event_jBBrooksCycloActionPerformed
         try
         {
-            GearBoxDatabaseConnection database = new GearBoxDatabaseConnection();
-            ArrayList<String> options = database.GetBrooksCycloOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
-            String results = "";
-            int matchNumber = 0;
-            
-            if (!options.isEmpty())
-            {
-                for (String option : options)
-                {
-                    matchNumber += 1;
-                    
-                    // we only want to display the first two options
-                    // so once the match number is 2, we've got two options 
-                    if (matchNumber > 2)
-                    {
-                        break;
-                    }
-
-                    results += String.format("%d. %s\n\n", matchNumber, option);
-                }
-                
-                GearboxOptionsOutput.setText(results.trim());//trim to get rid of the trailing newlines
-                GearboxDetailsForPDF = options;
-            } 
-            else
-            {
-                JOptionPane.showMessageDialog(null, "No matches were found for the calculated results.", "No Matches", JOptionPane.INFORMATION_MESSAGE);
-            }        
+            GearboxService gearboxService = new GearboxService();
+            ArrayList<String> options = gearboxService.GetBrooksCycloOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
+            OutputGearboxOptions(options, "Brooks Cyclo");
         } 
         catch (NumberFormatException | HeadlessException e)
         {
@@ -1446,39 +1429,95 @@ public class Maininterface extends javax.swing.JFrame
     {//GEN-HEADEREND:event_jBBevelHelicalActionPerformed
         try
         {
-            GearBoxDatabaseConnection database = new GearBoxDatabaseConnection();
-            ArrayList<String> options = database.GetBevelHelicalOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
-            String results = "";
-            int matchNumber = 0;
-
-            if (!options.isEmpty())
-            {
-                for (String option : options)
-                {
-                    matchNumber += 1;
-
-                    // we only want to display the first two options
-                    // so once the match number is 2, we've got two options 
-                    if (matchNumber > 2)
-                    {
-                        break;
-                    }
-
-                    results += String.format("%d. %s\n\n", matchNumber, option);
-                }
-
-                GearboxOptionsOutput.setText(results.trim());//trim to get rid of the trailing newlines
-                GearboxDetailsForPDF = options;
-            } else
-            {
-                JOptionPane.showMessageDialog(null, "No matches were found for the calculated results.", "No Matches", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } catch (NumberFormatException | HeadlessException e)
+            GearboxService gearboxService = new GearboxService();
+            ArrayList<String> options = gearboxService.GetBevelHelicalOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
+            OutputGearboxOptions(options, "Bevel/Helical");
+        } 
+        catch (NumberFormatException | HeadlessException e)
         {
             InfoBox(e.getMessage());
         }
     }//GEN-LAST:event_jBBevelHelicalActionPerformed
 
+    private void jBHelicalActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jBHelicalActionPerformed
+    {//GEN-HEADEREND:event_jBHelicalActionPerformed
+        try
+        {
+            GearboxService gearboxService = new GearboxService();
+            ArrayList<String> options = gearboxService.GetHelicalOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
+            
+            OutputGearboxOptions(options, "Tramec Helical");
+
+        } catch (NumberFormatException | HeadlessException e)
+        {
+            InfoBox(e.getMessage());
+        }        
+    }//GEN-LAST:event_jBHelicalActionPerformed
+
+    private void jBKCWormboxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jBKCWormboxActionPerformed
+    {//GEN-HEADEREND:event_jBKCWormboxActionPerformed
+        try
+        {
+            GearboxService gearboxService = new GearboxService();
+            
+            Object[] motorOptions =
+            {
+                "4pole", "6pole"
+            };
+            
+            int choice = JOptionPane.showOptionDialog(null, "4pole or 6pole?", "Type of Motor", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, motorOptions, "4pole");
+
+            ArrayList<String> options = new ArrayList<>();
+
+            if (choice == 0)//they chose 4pole
+            {
+                options = gearboxService.GetKCWormbox4P(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
+                OutputGearboxOptions(options, "Tramec KC Wormbox 4pole");
+            } 
+            else//they chose 6pole
+            {
+                options = gearboxService.GetKCWormbox6P(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
+                OutputGearboxOptions(options, "Tramec KC Wormbox 6pole");                
+            }
+            
+        } 
+        catch (NumberFormatException | HeadlessException e)
+        {
+            InfoBox(e.getMessage());
+        }
+    }//GEN-LAST:event_jBKCWormboxActionPerformed
+
+    private void OutputGearboxOptions(ArrayList<String> options, String gearboxType)
+    {
+        String results = "";
+        int matchNumber = 0;
+
+        if (!options.isEmpty())
+        {
+            for (String option : options)
+            {
+                matchNumber += 1;
+
+                // we only want to display the first two options
+                // so once the match number is 2, we've got two options 
+                if (matchNumber > 2)
+                {
+                    break;
+                }
+
+                results += String.format("%d. %s\n\n", matchNumber, option);
+            }
+
+            GearboxOptionsOutput.setText(results.trim());//trim to get rid of the trailing newlines
+            GearboxDetailsForPDF = options;
+            GearboxType = gearboxType;
+        } 
+        else
+        {
+            JOptionPane.showMessageDialog(null, "No matches were found for the calculated results.", "No Matches", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    
     @Override
     public void print(Graphics g
     )
@@ -1632,11 +1671,6 @@ public class Maininterface extends javax.swing.JFrame
         return this.Radiananswer25f;
     }
 
-    public String getSpeedofbeltanswer29f()
-    {
-        return this.Speedofbeltanswer29f;
-    }
-
     public String getLoadperhourcontiniousoutput30f()
     {
         return this.Loadperhourcontiniousoutput30f;
@@ -1709,8 +1743,8 @@ public class Maininterface extends javax.swing.JFrame
         });
         
         // create the tables we need when the app is launched
-        GearBoxDatabaseConnection databaseConnection = new GearBoxDatabaseConnection();
-        databaseConnection.CreateTables();
+        GearboxService gearboxService = new GearboxService();
+        gearboxService.CreateTables();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Variables declaration - do not modify">
@@ -1738,6 +1772,8 @@ public class Maininterface extends javax.swing.JFrame
     private javax.swing.JLabel dbProcessing;
     private javax.swing.JButton jBBevelHelical;
     private javax.swing.JButton jBBrooksCyclo;
+    private javax.swing.JButton jBHelical;
+    private javax.swing.JButton jBKCWormbox;
     private javax.swing.JButton jBQuit;
     private javax.swing.JButton jBReset;
     private javax.swing.JButton jBWormBox;
