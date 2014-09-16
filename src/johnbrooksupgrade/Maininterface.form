@@ -173,7 +173,7 @@
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="rpmResultsOutput" alignment="1" min="-2" pref="68" max="-2" attributes="0"/>
-                                  <Component id="Beltloadoutput" alignment="1" min="-2" pref="68" max="-2" attributes="0"/>
+                                  <Component id="txtPullForce" alignment="1" min="-2" pref="68" max="-2" attributes="0"/>
                                   <Component id="Nmoutput" alignment="1" min="-2" pref="68" max="-2" attributes="0"/>
                                   <Component id="Kwoutput" alignment="1" min="-2" pref="68" max="-2" attributes="0"/>
                               </Group>
@@ -424,7 +424,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="Beltloadoutput" max="32767" attributes="0"/>
+                                      <Component id="txtPullForce" max="32767" attributes="0"/>
                                       <Component id="jLabel20" min="-2" pref="23" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
@@ -674,7 +674,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="otherActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="Beltloadoutput">
+    <Component class="javax.swing.JLabel" name="txtPullForce">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Verdana" size="12" style="1"/>
@@ -925,7 +925,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Verdana" size="12" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Total Belt Pull"/>
+        <Property name="text" type="java.lang.String" value="Pull Force"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel20">
@@ -933,7 +933,8 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Verdana" size="12" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Kg&apos;f"/>
+        <Property name="text" type="java.lang.String" value="Kg/f"/>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jButton1">
