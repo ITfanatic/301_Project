@@ -104,10 +104,12 @@ public class UserService
 
             String insertUser = "INSERT INTO Users VALUES ('" + userName + "')";
             st.executeUpdate(insertUser);
+            
+            JOptionPane.showMessageDialog(null, "User added successfully.\nThis user will now be an existing sales person option.", "Successful", JOptionPane.INFORMATION_MESSAGE);
         }
         catch(ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e)
         {
-            JOptionPane.showMessageDialog(null, "Something went wrong adding the user.\nCheck the user doesn't already exist. | Details: \n" + e.getMessage(), "Error!", JOptionPane.INFORMATION_MESSAGE);            
+            JOptionPane.showMessageDialog(null, "Something went wrong adding the user.\nCheck the user doesn't already exist.", "Error!", JOptionPane.INFORMATION_MESSAGE);            
         }   
     }
 }

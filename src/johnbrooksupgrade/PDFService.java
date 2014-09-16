@@ -242,18 +242,15 @@ public class PDFService extends javax.swing.JFrame {
 
     private void jBAddUserActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jBAddUserActionPerformed
     {//GEN-HEADEREND:event_jBAddUserActionPerformed
-        // When adding a new user the existing users field should be empty and they should have
-        // a value for the new user name
-        if(cmbSalesPerson.getSelectedItem() == null && !txtNewUser.getText().isEmpty())
+        // When adding a new user they should have a value for the new user name
+        if(!txtNewUser.getText().isEmpty())
         {          
             userService.InsertUser(txtNewUser.getText());
             
             // Reload the names now that a new name has been added
             LoadUserNames();
             // Reset the selected item otherwise both will have a value and it might be confusing
-            cmbSalesPerson.setSelectedItem(null);
-            
-            JOptionPane.showMessageDialog(null, "User added successfully.\nThis user will now be an existing sales person option.", "Successful", JOptionPane.INFORMATION_MESSAGE);            
+            cmbSalesPerson.setSelectedItem(null);        
         }
         else
         {
@@ -281,8 +278,17 @@ public class PDFService extends javax.swing.JFrame {
     }//closes the window once you click save
 
     private void SaveActionPerformed(java.awt.event.ActionEvent evt) 
-    {    
-        Salesman = txtNewUser.getText().isEmpty() ? cmbSalesPerson.getSelectedItem().toString() : txtNewUser.getText();
+    {
+        if (txtNewUser.getText().isEmpty() && cmbSalesPerson.getSelectedItem() == null)
+        {
+            JOptionPane.showMessageDialog(null, "Please select an existing sales person or enter a new one.", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else
+        {
+            Salesman = txtNewUser.getText().isEmpty() ? cmbSalesPerson.getSelectedItem().toString() : txtNewUser.getText();
+        }
+        
         Date = DateInput.getText();
         String ClientName = ClientnameInput.getText();
         String ProjectName = ProjectNameInput.getText();
