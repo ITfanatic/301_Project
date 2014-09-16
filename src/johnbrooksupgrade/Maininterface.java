@@ -24,7 +24,6 @@ public class Maininterface extends javax.swing.JFrame
     protected String Lengthperhouranswer7f;
     protected String Kgsperhouranswer9f;
     protected String Kgatanygiventimeanswer10f;
-    protected String Beltloadanswer13f;
     protected String Nmanswer15f;
     protected String Designkwanswer18f;
     protected String Rpmoutput20f;
@@ -35,6 +34,7 @@ public class Maininterface extends javax.swing.JFrame
     protected String Loadperhourcontiniousoutput30f;
     protected ArrayList<String> GearboxDetailsForPDF = new ArrayList<String>();   
     protected String GearboxType;
+    protected String PullForce;
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="calculation vars">
@@ -114,7 +114,7 @@ public class Maininterface extends javax.swing.JFrame
         Servicefactorinput = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         other = new javax.swing.JButton();
-        Beltloadoutput = new javax.swing.JLabel();
+        txtPullForce = new javax.swing.JLabel();
         Nmoutput = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         Conveyorspeedinput = new javax.swing.JTextField();
@@ -293,7 +293,7 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
 
-        Beltloadoutput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        txtPullForce.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
 
         Nmoutput.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
 
@@ -448,10 +448,11 @@ public class Maininterface extends javax.swing.JFrame
         jLabel6.setText("Torque");
 
         jLabel14.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
-        jLabel14.setText("Total Belt Pull");
+        jLabel14.setText("Pull Force");
 
         jLabel20.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
-        jLabel20.setText("Kg'f");
+        jLabel20.setText("Kg/f");
+        jLabel20.setToolTipText("");
 
         jButton1.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jButton1.setText("PDF");
@@ -703,7 +704,7 @@ public class Maininterface extends javax.swing.JFrame
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(rpmResultsOutput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(Beltloadoutput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtPullForce, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(Nmoutput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(Kwoutput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -894,7 +895,7 @@ public class Maininterface extends javax.swing.JFrame
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(Beltloadoutput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtPullForce, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jLabel14))
                                 .addGap(13, 13, 13)
@@ -956,6 +957,8 @@ public class Maininterface extends javax.swing.JFrame
             //Error checking for inputs
         } else
         {
+            
+            // These calculations are the ones that are used to determine the KGs at any given time
 
             Drumdiameterinput1 = Double.parseDouble(Drumdiameterinput.getText());
             Circumferenceanswer2 = Drumdiameterinput1 * 3.142;
@@ -963,32 +966,34 @@ public class Maininterface extends javax.swing.JFrame
             //grabs inputed text puts it in a variable and does the math then outputs it to another variable.
 
             Rpmoutput20 = Double.parseDouble(Rpminput.getText());
+            // To get the metres per minute, multply the circumference by the RPM
             Metresperminuteanswer4 = (Circumferenceanswer2 * Rpmoutput20);
             Metresperminuteanswer4f = String.format("%.2f", Metresperminuteanswer4);
-            //grabs inputed text puts it in a variable and does the math then outputs it to another variable.
 
+            // To get the metres per hour we have to multiply the metres per min by 60
             Metresperhouranswer5 = (Metresperminuteanswer4 * 60);
             Metresperhouranswer5f = String.format("%.2f", Metresperhouranswer5);
-            //grabs variable value and does the math then outputs it to another variable.
 
-            Lengthofconveyor6 = Double.parseDouble(Lengthofconveyorinput.getText());
+            
+            Lengthofconveyor6 = Double.parseDouble(Lengthofconveyorinput.getText());     
+            // To get the length per hour, divide the metres per hour by the length of the conveyor
             Lengthperhouranswer7 = (Metresperhouranswer5 / Lengthofconveyor6);
             Lengthperhouranswer7f = String.format("%.2f", Lengthperhouranswer7);
-            //grabs inputed text puts it in a variable and does the math then outputs it to another variable.
-
+            
+           
             Productonconveyorinput8 = Double.parseDouble(Productonconveyorinput.getText());
+            
+            // To get the Kgs per hour, multiply the length per hour by the product on conveyor
             Kgsperhouranswer9 = (Lengthperhouranswer7 * Productonconveyorinput8);
             Kgsperhouranswer9f = String.format("%.2f", Kgsperhouranswer9);
-            //grabs inputed text puts it in a variable and does the math then outputs it to another variable.
-
+            
+            // Finally, to get the kgs at any given time, divide the kgs per hour by the length per hour
             Kgatanygiventimeanswer10 = (Kgsperhouranswer9 / Lengthperhouranswer7);
             //grabs both variable values and does the math then outputs it to another variable.
 
             String fstring = String.format("%.2f", Kgatanygiventimeanswer10);
             //makes it print to 2 decimal places
             Kgatanygiventimeanswer10f = (fstring);
-            //grabs the local variable and puts it into the global variable
-
         }
     }
 
@@ -1018,10 +1023,10 @@ public class Maininterface extends javax.swing.JFrame
             {
                 CaculateRpmOrConveyorSpeedDependingOnInput();
                 CalculateApplicationFactor();
-                Beltload();
+                CalculateBeltload();
+                CalculateKgsAtAnyGivenTime();  // This needs to be calculated before the torque because the torque equation is based off of it              
                 CalculateTorque();
                 Designkw();
-                CalculateKgsAtAnyGivenTime();
                 GearboxOptionsOutput.setText("");
             }
         } 
@@ -1049,7 +1054,7 @@ public class Maininterface extends javax.swing.JFrame
         }
     }
 
-    private void Beltload()
+    private void CalculateBeltload()
     {
         if (Drumdiameterinput.getText().isEmpty() || Widthofconveyorinput.getText().isEmpty()
                 || Beltweightinput.getText().isEmpty() || Lengthofconveyorinput.getText().isEmpty())
@@ -1062,19 +1067,27 @@ public class Maininterface extends javax.swing.JFrame
             Widthofconveyorinput11 = Double.parseDouble(Widthofconveyorinput.getText());
             Beltweightinput12 = Double.parseDouble(Beltweightinput.getText());
             Lengthofconveyor6 = Double.parseDouble(Lengthofconveyorinput.getText());
-            //gabbing inputs values and putting them into variables.
 
+            // This calculates the actual weight of the belt in KGs (NOT THE SAME AS the Belt Weight Kg/m2 which is entered by the user)
+            
+            /*** THIS IS  ALSO NOT THE TOTAL BELT PULL, WHERE THE PRODUCT ON THE CONVEYOR IS INCLUDED. 
+                 JUST THE BELT WEIGHT (check the spreadsheet if you don't believe me). ***/
+            
+            //Calculate the circumference
             Circumferenceanswer2 = Drumdiameterinput1 * 3.142;
-            Beltloadanswer13 = ((((Lengthofconveyor6 * 2) + Circumferenceanswer2) * Widthofconveyorinput11 * Beltweightinput12) + Productonconveyor32) * Radiananswer25;
-            //grabs inputed text puts it in a variable and does the math then outputs it to another variable
+            
+            //The equation for the belt weight (also known as belt load) is ((Length of conveyor * 2) + Circumeference) * Width of the Conveyor * Belt WeightKg/m2
+            Beltloadanswer13 = ((Lengthofconveyor6 * 2) + Circumferenceanswer2) * Widthofconveyorinput11 * Beltweightinput12;
 
-            String fstring = String.format("%.2f", Beltloadanswer13);
-            //makes it print to 2 decimal place and converting from a double to a string
-            Beltloadanswer13f = (fstring);
-            Beltloadoutput.setText(fstring);
-            //pushing the values to show on the textbox.
+            // This equation gets us the pull force (Kg force) of the belt - this is not in the spreadsheet
+            Double pullForce = (Double.parseDouble(Productonconveyorinput.getText()) + Beltloadanswer13) * Double.parseDouble(Applicationfactoranswer.getText());
+            
+            String pullForceString = String.format("%.2f", pullForce);
+            
+            PullForce = pullForceString;
+            txtPullForce.setText(pullForceString);
 
-            Beltloadoutput.setForeground(Color.BLACK);
+            txtPullForce.setForeground(Color.BLACK);
         }
     }
 
@@ -1083,20 +1096,21 @@ public class Maininterface extends javax.swing.JFrame
         if (Drumdiameterinput.getText().isEmpty() || Beltweightinput.getText().isEmpty() || Productonconveyorinput.getText().isEmpty())
         {
             errorMessages.add("Attempted to calculate torque but one or more requried fields: Drum Diameter, Product on Conveyor or Belt Weight were empty.");
-
-            //Error checking for inputs
-        } else
+        } 
+        else
         {
 
             Productonconveyor32 = Double.parseDouble(Productonconveyorinput.getText());
             Drumdiameterinput1 = Double.parseDouble(Drumdiameterinput.getText());
             Beltweightinput12 = Double.parseDouble(Beltweightinput.getText());
-            //gabbing inputs values and putting them into variables.
 
-            //Nmanswer15 = (Productonconveyor32 + Beltloadanswer13) * Radiananswer25 * ((Drumdiameterinput1 / 2)) * 10;
-             Nmanswer15 = Beltloadanswer13 * (Drumdiameterinput1 / 2) * 9.81;
 
-            //grabs inputed text puts it in a variable and does the math then outputs it to another variable
+            
+            // So to determine the torque the following equation must be used (KGsAtAnyGivenTime + Belt Weight) * Application Factor * (Drumdiameter /2) * 9.81
+            // Belt Weight is the belt load answer, this was originally built by retards so things have retarded names.
+            
+            Nmanswer15 = (Kgatanygiventimeanswer10 + Beltloadanswer13) * Double.parseDouble(Applicationfactoranswer.getText()) * (Drumdiameterinput1 / 2) * 9.81;
+            
             String fstring = String.format("%.2f", Nmanswer15);
             //makes it print to 2 decimal place and converting from a double to a string
             Nmanswer15f = (fstring);
@@ -1109,9 +1123,13 @@ public class Maininterface extends javax.swing.JFrame
     private void Designkw()
     {
         // design Power = ( Service factor * torque * rotation ) / 9550
-
         Servicefactorinput17 = Double.parseDouble(Servicefactorinput.getText());
+        
+        // This is the first power equation used to calculate the design power
+        // Which is Torque multiplied by RPM divided by 9550
         Kwanswer16 = (Nmanswer15 * Rpmconveyor34) / 9550;
+        
+        // Design power is just the first power result multiplied by the service factor
         Designkwanswer18 = (Kwanswer16 * Servicefactorinput17);
 
         // Format answers to 2 decimal places    
@@ -1302,10 +1320,11 @@ public class Maininterface extends javax.swing.JFrame
             Radianangle24 = Math.toRadians(Angleinput23);
 
             // calculate the application factor Friction factor * cos(slope) + sin(slope)
+            // This will increase as the angle of the belt increases
             Radiananswer25 = Materialtypeinput22 * Math.cos(Radianangle24) + Math.sin(Radianangle24);
 
             // format output
-            String fstring = String.format("%.2f", Radiananswer25);
+            String fstring = String.format("%.3f", Radiananswer25);
             Radiananswer25f = (fstring);
             Applicationfactoranswer.setText(fstring);
             Applicationfactoranswer.setForeground(Color.BLACK);
@@ -1379,6 +1398,7 @@ public class Maininterface extends javax.swing.JFrame
             GearboxService gearboxService = new GearboxService();
             ArrayList<String> options = gearboxService.GetWormBoxOptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
             OutputGearboxOptions(options, "Brooks Drive Wormbox");
+            GearboxOptionsOutput.setText(GearboxOptionsOutput.getText() + "\n\nBased on RPM and Torque from results.\nOrdered by smallest Kw rating and\nlowest RPM.");
         } 
         catch (NumberFormatException | HeadlessException e)
         {
@@ -1405,7 +1425,7 @@ public class Maininterface extends javax.swing.JFrame
         Beltweightinput.setText("");
         Widthofconveyorinput.setText("");
         rpmResultsOutput.setText("");
-        Beltloadoutput.setText("");
+        txtPullForce.setText("");
         Nmoutput.setText("");
         Kwoutput.setText("");
         GearboxOptionsOutput.setText("");
@@ -1465,18 +1485,19 @@ public class Maininterface extends javax.swing.JFrame
                 "4pole", "6pole"
             };
             
+            //create an input dialog to choose between 4 and 6pole motors for this option
             int choice = JOptionPane.showOptionDialog(null, "4pole or 6pole?", "Type of Motor", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, motorOptions, "4pole");
 
             ArrayList<String> options = new ArrayList<>();
 
             if (choice == 0)//they chose 4pole
             {
-                options = gearboxService.GetKCWormbox4P(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
+                options = gearboxService.GetKCWormbox4POptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
                 OutputGearboxOptions(options, "Tramec KC Wormbox 4pole");
             } 
             else//they chose 6pole
             {
-                options = gearboxService.GetKCWormbox6P(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
+                options = gearboxService.GetKCWormbox6POptions(Designkwanswer18, Double.parseDouble(rpmResultsOutput.getText()), Nmanswer15);
                 OutputGearboxOptions(options, "Tramec KC Wormbox 6pole");                
             }
             
@@ -1509,8 +1530,14 @@ public class Maininterface extends javax.swing.JFrame
             }
 
             GearboxOptionsOutput.setText(results.trim());//trim to get rid of the trailing newlines
-            GearboxDetailsForPDF = options;
-            GearboxType = gearboxType;
+
+            // if the first result contains the word Sorry, then the torque output
+            // is too high and we don't need to set these vars.
+            if(!options.get(0).contains("Sorry"))
+            {
+                GearboxDetailsForPDF = options;
+                GearboxType = gearboxType;
+            }
         } 
         else
         {
@@ -1640,12 +1667,7 @@ public class Maininterface extends javax.swing.JFrame
     {
         return this.Kgatanygiventimeanswer10f;
     }
-
-    public String getBeltloadanswer13f()
-    {
-        return this.Beltloadanswer13f;
-    }
-
+    
     public String getNmanswer15f()
     {
         return this.Nmanswer15f;
@@ -1742,8 +1764,8 @@ public class Maininterface extends javax.swing.JFrame
             }
         });
         
-        // create the tables we need when the app is launched
         GearboxService gearboxService = new GearboxService();
+        // create the tables we need when the app is launched  
         gearboxService.CreateTables();
     }
 
@@ -1751,7 +1773,6 @@ public class Maininterface extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Angleinput;
     private javax.swing.JLabel Applicationfactoranswer;
-    private javax.swing.JLabel Beltloadoutput;
     private javax.swing.JTextField Beltweightinput;
     private javax.swing.JTextField Conveyorspeedinput;
     private javax.swing.JTextField Drumdiameterinput;
@@ -1823,6 +1844,7 @@ public class Maininterface extends javax.swing.JFrame
     private javax.swing.JButton other;
     private javax.swing.JLabel powerLbl;
     private javax.swing.JLabel rpmResultsOutput;
+    private javax.swing.JLabel txtPullForce;
     private javax.swing.JLabel weightofunitlabel;
     // End of variables declaration//GEN-END:variables
 // </editor-fold>

@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -29,13 +30,12 @@ import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 public class PDFService extends javax.swing.JFrame {
 
     protected String Filename;
-    protected String Salesmen;
     protected String Date;
-    protected String ClientName;
-    protected String ProjectName;
     public Maininterface mainDataEntry; 
     private BufferedImage image2;
     private String Branch;
+    private String Salesman;
+    private final UserService userService = new UserService();
 
     //import classes and creation of variables
     /**
@@ -51,6 +51,9 @@ public class PDFService extends javax.swing.JFrame {
         
         //Set the date to today's by default
         DateInput.setText(GetCurrentDate());
+        
+        userService.CreateTables();
+        LoadUserNames();
     }
 
     /**
@@ -64,7 +67,6 @@ public class PDFService extends javax.swing.JFrame {
     {
 
         Save = new javax.swing.JButton();
-        SalesmenInput = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         ClientnameInput = new javax.swing.JTextField();
@@ -73,9 +75,20 @@ public class PDFService extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         ProjectNameInput = new javax.swing.JTextField();
         jComboBoxBranch = new javax.swing.JComboBox();
+        cmbSalesPerson = new javax.swing.JComboBox();
+        jBAddUser = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        txtNewUser = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosed(java.awt.event.WindowEvent evt)
+            {
+                formWindowClosed(evt);
+            }
+        });
 
         Save.setText("Generate PDF");
         Save.setToolTipText("");
@@ -88,9 +101,7 @@ public class PDFService extends javax.swing.JFrame {
             }
         });
 
-        SalesmenInput.setText("Name");
-
-        jLabel1.setText("Name of SalesPerson");
+        jLabel1.setText("Sales Person (Existing)");
 
         jLabel2.setText("Name of Client");
 
@@ -111,6 +122,25 @@ public class PDFService extends javax.swing.JFrame {
             }
         });
 
+        jBAddUser.setText("Add User");
+        jBAddUser.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jBAddUserActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Sales Person (New)");
+
+        txtNewUser.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyTyped(java.awt.event.KeyEvent evt)
+            {
+                txtNewUserKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -121,24 +151,35 @@ public class PDFService extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel1))
+                            .addGap(45, 45, 45))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jComboBoxBranch, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(68, 68, 68)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(DateInput, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ClientnameInput, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                            .addComponent(SalesmenInput)
-                            .addComponent(ProjectNameInput))
-                        .addGap(63, 63, 63))
+                        .addComponent(jLabel5)
+                        .addGap(61, 61, 61)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(DateInput, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ProjectNameInput)
+                        .addComponent(cmbSalesPerson, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jComboBoxBranch, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtNewUser, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ClientnameInput, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBAddUser)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,70 +190,115 @@ public class PDFService extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(SalesmenInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ClientnameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(ProjectNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1)
+                    .addComponent(cmbSalesPerson, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jComboBoxBranch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
-                .addComponent(Save))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtNewUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBAddUser))
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(Save))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(ClientnameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(ProjectNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBoxBranch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 80, Short.MAX_VALUE))))
         );
+
+        jLabel1.getAccessibleContext().setAccessibleName("Existing Sales People");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBoxBranchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxBranchActionPerformed
         int item = jComboBoxBranch.getSelectedIndex();
-
-        
-        switch (item) {
+   
+        switch (item) 
+        {
             case 0:
                 Branch = (null);
-
-                break;
-                
+                break;          
             case 1:
                 Branch = ("AUCKLAND");
-
                 break;
             case 2:
                 Branch = ("WELLINGTON");
-
                 break;
             case 3:
                 Branch = ("CHRISTCHURCH");
-
                 break;
-        }//get the selected item
-        //gets the value of the matching index or information
+        }
     }//GEN-LAST:event_jComboBoxBranchActionPerformed
 
-    private void close() {
+    private void jBAddUserActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jBAddUserActionPerformed
+    {//GEN-HEADEREND:event_jBAddUserActionPerformed
+        // When adding a new user the existing users field should be empty and they should have
+        // a value for the new user name
+        if(cmbSalesPerson.getSelectedItem() == null && !txtNewUser.getText().isEmpty())
+        {          
+            userService.InsertUser(txtNewUser.getText());
+            
+            // Reload the names now that a new name has been added
+            LoadUserNames();
+            // Reset the selected item otherwise both will have a value and it might be confusing
+            cmbSalesPerson.setSelectedItem(null);
+            
+            JOptionPane.showMessageDialog(null, "User added successfully.\nThis user will now be an existing sales person option.", "Successful", JOptionPane.INFORMATION_MESSAGE);            
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "You must enter the sales person's name.", "Error!", JOptionPane.ERROR_MESSAGE);            
+        }
+    }//GEN-LAST:event_jBAddUserActionPerformed
+
+    private void txtNewUserKeyTyped(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtNewUserKeyTyped
+    {//GEN-HEADEREND:event_txtNewUserKeyTyped
+        // if they're entering a new user name, we need to clear out the existing sales person combo, they can only have a value for existing or new.
+        cmbSalesPerson.setSelectedItem(null);
+    }//GEN-LAST:event_txtNewUserKeyTyped
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosed
+    {//GEN-HEADEREND:event_formWindowClosed
+        // Clear the new user text so when they open this form again it doesn't have the
+        // value still.
+        txtNewUser.setText("");
+    }//GEN-LAST:event_formWindowClosed
+
+    private void close() 
+    {
         WindowEvent windowclosingEvent = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(windowclosingEvent);
     }//closes the window once you click save
 
-    private void SaveActionPerformed(java.awt.event.ActionEvent evt) {
-        Salesmen = SalesmenInput.getText();
+    private void SaveActionPerformed(java.awt.event.ActionEvent evt) 
+    {    
+        Salesman = txtNewUser.getText().isEmpty() ? cmbSalesPerson.getSelectedItem().toString() : txtNewUser.getText();
         Date = DateInput.getText();
-        ClientName = ClientnameInput.getText();
-        ProjectName = ProjectNameInput.getText();
-        //grab values and put them into a variable
-        if (Branch == null) {
+        String ClientName = ClientnameInput.getText();
+        String ProjectName = ProjectNameInput.getText();
+        
+        if (Branch == null) 
+        {
             JOptionPane.showMessageDialog(null,
                     "Please Select a branch and try again.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
-        }
-        //error message box if they don't select a branch
-        if (Branch != null) {
+        }      
+        else
+        {
+            /*** 
+             * This is the logic that prints the information to a PDF 
+             ***/
             
             //We want to save the file to Windows' temporary files folder so it can be loaded from there straight away
             //This temporary file is deleted when the program is exited
@@ -225,8 +311,8 @@ public class PDFService extends javax.swing.JFrame {
                     PDPage page;
 
                     doc = new PDDocument();
-            // Create a new blank page and add it to the document
                     
+            // Create a new blank page and add it to the document
                     page = new PDPage();
                     doc.addPage(page);
                     PDFont font = PDType1Font.COURIER_BOLD;
@@ -240,13 +326,15 @@ public class PDFService extends javax.swing.JFrame {
                     PDFont font2 = PDType1Font.COURIER;
                     content.setFont(font, 14);
                     content.moveTextPositionByAmount(-50, -65);
-                    content.drawString("Date:" + getdate());
+                    content.drawString("Date:" + Date);
                     content.moveTextPositionByAmount(0, -14);
-                    content.drawString("Sales person: " + getsalesMen());
+                    content.drawString("Sales person: " + Salesman);
                     content.moveTextPositionByAmount(0, -14);
-                    content.drawString("Client Name: " + getClientName());
+                    content.drawString("Client Name: " + ClientName);
                     content.moveTextPositionByAmount(0, -14);
-                    content.drawString("Project Name: " + getProjectName());
+                    content.drawString("Project Name: " + ProjectName);
+                    content.moveTextPositionByAmount(0, -14);                    
+                    content.drawString("Branch: " + Branch);
                     content.moveTextPositionByAmount(0, -32);
                     
                 // Specifications    
@@ -280,7 +368,7 @@ public class PDFService extends javax.swing.JFrame {
                     content.moveTextPositionByAmount(0, -14);
                     content.drawString("Application Factor: " + mainDataEntry.getRadiananswer25f());
                     content.moveTextPositionByAmount(0, -14);
-                    content.drawString("Total belt pull Kgf: " + mainDataEntry.getBeltloadanswer13f());
+                    content.drawString("Pull Force Kg/f: " + mainDataEntry.PullForce);
                     content.moveTextPositionByAmount(0, -14);
                     content.drawString("Nm Torque: " + mainDataEntry.getNmanswer15f());
                     content.moveTextPositionByAmount(0, -14);
@@ -397,35 +485,34 @@ public class PDFService extends javax.swing.JFrame {
         
         return dateFormat.format(date);
     }
-
-    //<editor-fold defaultstate="collapsed" desc="getters">
-    public String getdate() {
-        return Date;
+    
+    private void LoadUserNames()
+    {
+        ArrayList<User> users = userService.GetUsers();
+        
+        // Need to remove the current items so when reloading the items we
+        // don't just add them all again on top off the ones that are there already
+        cmbSalesPerson.removeAllItems();
+        
+        for (User user : users)
+        {
+            cmbSalesPerson.addItem(user.GetName());
+        }
     }
-
-    public String getsalesMen() {
-        return Salesmen;
-    }
-
-    public String getClientName() {
-        return ClientName;
-    }
-
-    public String getProjectName() {
-        return ProjectName;
-    }
-    //</editor-fold>
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField ClientnameInput;
     private javax.swing.JTextField DateInput;
     private javax.swing.JTextField ProjectNameInput;
-    private javax.swing.JTextField SalesmenInput;
     private javax.swing.JButton Save;
+    private javax.swing.JComboBox cmbSalesPerson;
+    private javax.swing.JButton jBAddUser;
     private javax.swing.JComboBox jComboBoxBranch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JTextField txtNewUser;
     // End of variables declaration//GEN-END:variables
 }

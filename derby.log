@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Tue Sep 02 13:54:22 NZST 2014:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.3.0 - (1405108): instance a816c00e-0148-3411-eaf0-00000094c200 
-on database directory C:\Users\Joshua\Desktop\Project\Conveyor\johnbrooksfinal\JohnBrooksConveyorSystem\301_Project\JohnBrooks  with class loader sun.misc.Launcher$AppClassLoader@1f12c4e 
+Tue Sep 16 15:30:17 NZST 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.3.0 - (1405108): instance a816c00e-0148-7c82-c351-000000b313b8 
+on database directory C:\Users\Joshua\Desktop\Project\Conveyor\johnbrooksfinal\JohnBrooksConveyorSystem\301_Project\JohnBrooks  with class loader sun.misc.Launcher$AppClassLoader@32a325 
 Loaded from file:/C:/Program%20Files%20(x86)/Java/jdk1.7.0_45/db/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.7.0_45-b18

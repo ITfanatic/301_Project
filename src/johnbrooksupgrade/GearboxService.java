@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 public class GearboxService
 {    
-    public String url, driver;
+    private String url, driver;
 
     public GearboxService()
     {
@@ -22,8 +22,6 @@ public class GearboxService
     {
         ArrayList<String> options = new ArrayList();
 
-        double dbKilloWatt = DetermineDBKilloWattForWormBox(kwInput);
-
         try
         {
             
@@ -31,23 +29,28 @@ public class GearboxService
             try (Connection sqlCon = DriverManager.getConnection(url))
             {
                 java.sql.Statement st = sqlCon.createStatement();
-                String selectOptions = String.format("SELECT Size, Inches FROM Wormbox WHERE KWInput=%.2f and RPM >= %.1f and Torque >= %.2f ORDER BY Size", dbKilloWatt, rpm, torque);
-                                
+               
+                // Wormbox should be based on any RPM and Torque that is greater than or equal to the requirements but orderedy by the smallest Kw 
+                // this is because there are cases where the Kw is enough but for that Kw the RPM or Torque isn't high enough. Meaning they have to
+                // go to the next Kw size.
+                String selectOptions = String.format("SELECT KWInput, Size, Inches,RPM FROM Wormbox WHERE RPM >= %.1f and Torque >= %.2f ORDER BY KWInput,Size,RPM", rpm, torque);              
+                
                 ResultSet res = st.executeQuery(selectOptions);
                 
                 while (res.next())
                 {
                     int motorSize = res.getInt("Size");
                     double gearboxRatio = res.getDouble("Inches");
+                    double kwOutput = res.getDouble("KWInput");
                     
                     // only for this number should we display to 1dp otherwise don't display the dp
                     if (gearboxRatio == 7.50)
                     {
-                        options.add(String.format("%.2fKw 4P Motor \nFCNDK %d %.1f:1", dbKilloWatt,motorSize, gearboxRatio));
+                        options.add(String.format("%.2fKw 4P Motor \nFCNDK %d %.1f:1", kwOutput,motorSize, gearboxRatio));
                     }
                     else
                     {
-                        options.add(String.format("%.2fKw 4P Motor \nFCNDK %d %.0f:1", dbKilloWatt,motorSize, gearboxRatio));                        
+                        options.add(String.format("%.2fKw 4P Motor \nFCNDK %d %.0f:1", kwOutput,motorSize, gearboxRatio));    
                     }
                 }
             }
@@ -58,62 +61,6 @@ public class GearboxService
         }
 
         return options;
-    }
-
-    private double DetermineDBKilloWattForWormBox(double kwInput)
-    {
-        // ***Hack alert*** 
-        // We need to convert the KW value into a value we can match to the database KW values
-        // this seemed like quickest way to do it.
-
-        if (kwInput < 0.55)
-        {
-            kwInput = 0.55;
-            return kwInput;
-        } else if (kwInput < 0.75)
-        {
-            kwInput = 0.75;
-            return kwInput;
-        } else if (kwInput < 1.1)
-        {
-            kwInput = 1.1;
-            return kwInput;
-        } else if (kwInput < 1.5)
-        {
-            kwInput = 1.5;
-            return kwInput;
-        } else if (kwInput < 2.2)
-        {
-            kwInput = 2.2;
-            return kwInput;
-        } else if (kwInput < 3.0)
-        {
-            kwInput = 3.0;
-            return kwInput;
-        } else if (kwInput < 4.0)
-        {
-            kwInput = 4.0;
-            return kwInput;
-        } else if (kwInput < 5.5)
-        {
-            kwInput = 5.5;
-            return kwInput;
-        } else if (kwInput < 7.5)
-        {
-            kwInput = 7.5;
-            return kwInput;
-        } else if (kwInput < 11.0)
-        {
-            kwInput = 11.0;
-            return kwInput;
-        } else if (kwInput < 15.0)
-        {
-            kwInput = 15.0;
-            return kwInput;
-        } else
-        {
-            return 0.0;
-        }
     }
 
     public ArrayList GetBrooksCycloOptions(double kwInput, double rpm, double torque)
@@ -131,8 +78,10 @@ public class GearboxService
                     being able to handle (greater than or equal to) the kwinput, rpm, and torque results determined by the conveyor's specs.
                
                     Because we only display the first two matches we want to order the query results by KW so that the two options 
-                    suggested are the smallest but still fit for purpose */                
-                String selectOptions = String.format("SELECT Gearbox, Ratio, ServiceFactor, KWInput, ServiceFactorOverload FROM BROOKSCYCLO WHERE KWInput >=%.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput", kwInput, rpm, torque);
+                    suggested are the smallest but still fit for purpose. We then order by lowest RPM, then smallest servicefactor. That is the 
+                    order of importance.
+                 */                
+                String selectOptions = String.format("SELECT Gearbox, Ratio, ServiceFactor, KWInput, ServiceFactorOverload,RPM FROM BROOKSCYCLO WHERE KWInput >=%.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput,RPM,ServiceFactor", kwInput, rpm, torque);
                 ResultSet res = st.executeQuery(selectOptions);
                 
                 while (res.next())
@@ -172,7 +121,7 @@ public class GearboxService
             try (Connection sqlCon = DriverManager.getConnection(url))
             {
                 java.sql.Statement st = sqlCon.createStatement();
-                String selectOptions = String.format("SELECT Size, Ratio, KWInput FROM BEVELHELICAL WHERE KWInput >= %.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput", kwInput, rpm, torque);
+                String selectOptions = String.format("SELECT ID,Size, Ratio, KWInput,RPM FROM BEVELHELICAL WHERE KWInput >= %.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput,RPM,ID", kwInput, rpm, torque);
                                 
                 ResultSet res = st.executeQuery(selectOptions);
                 
@@ -181,8 +130,18 @@ public class GearboxService
                     String motorSize = res.getString("Size");
                     double gearboxRatio = res.getDouble("Ratio");
                     double KW = res.getDouble("KWInput");
+                    double RPMOoutput = res.getDouble("RPM");
                     
-                    options.add(String.format("%.2fKw 4P Motor \n%s %.2f", KW, motorSize, gearboxRatio));
+                    // this checks if the ratio is a whole number, if so we can display to 0dp
+                    if ((gearboxRatio % 1) == 0)
+                    {
+                        options.add(String.format("%.2fKw 4P Motor \nSize: %s Ratio: %.0f RPM: %.0f", KW, motorSize, gearboxRatio, RPMOoutput));
+                    } 
+                    else
+                    {
+
+                        options.add(String.format("%.2fKw 4P Motor \nSize: %s Ratio: %.1f RPM: %.0f", KW, motorSize, gearboxRatio, RPMOoutput));
+                    }
                 }
             }
             
@@ -205,17 +164,107 @@ public class GearboxService
             try (Connection sqlCon = DriverManager.getConnection(url))
             {
                 java.sql.Statement st = sqlCon.createStatement();
-                String selectOptions = String.format("SELECT Size, Ratio, KWInput FROM HELICAL WHERE KWInput >= %.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput", kwInput, rpm, torque);
+                
+                // Order the results by the smallest Kw and the smallest RPM, a lower RPM is more important 
+                // than a lower torque, then order by ID so that the smallest size motor is chosen i.e. 56B over 71B
+                String selectOptions = String.format("SELECT Size, Ratio, KWInput,RPM,Torque FROM HELICAL WHERE KWInput >= %.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput,RPM,ID", kwInput, rpm, torque);
                                 
                 ResultSet res = st.executeQuery(selectOptions);
-                
+                int count = 0;
+
                 while (res.next())
                 {
                     String motorSize = res.getString("Size");
                     double gearboxRatio = res.getDouble("Ratio");
                     double KW = res.getDouble("KWInput");
+                    int RPM = res.getInt("RPM");
+                    int outputTorque = res.getInt("Torque");
                     
-                    options.add(String.format("%.2fKw 4P Motor \n%s %.2f", KW, motorSize, gearboxRatio));
+
+                    if (OutputTorqueIsTooHigh(torque, outputTorque))
+                    {
+                        // we don't want to add this if an option was found for the first result,
+                        // only if we hit this on the first result.
+                        if (count == 0)
+                        {
+                            options.add("Sorry, the output torque for this type of\ngearbox based on the results\nis in excess by more than 25%.\nPlease use a different gearbox option.");
+                        }
+                        
+                        break;
+                    }
+                    
+                    // this checks if the ratio is a whole number, if so we can display to 0dp
+                    if ((gearboxRatio % 1) == 0)
+                    {
+                        options.add(String.format("%.2fKw 4P Motor \nSize: %s Ratio: %.0f RPM: %d", KW, motorSize, gearboxRatio,RPM));
+                    } 
+                    else
+                    {
+                        options.add(String.format("%.2fKw 4P Motor \nSize: %s Ratio: %.1f RPM: %d", KW, motorSize, gearboxRatio,RPM));
+                    }
+                    
+                    count++;
+                   
+                    if(count == 2)
+                    {
+                        // only need two results
+                        break;
+                    }
+                }
+            }
+            
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error!", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        return options;
+    }
+
+    private boolean OutputTorqueIsTooHigh(double torque, double outputTorque)
+    {
+        // This finds what 25% of the required torque is.
+        // We use this to find if the outputTorque is
+        // more than 25% over the torque requirements.
+        // If so then we should tell the
+        // user to use a different gearbox option
+        // because this one is too powerful for the requirements.
+        
+        double percentOfTorque = (torque * 25) / 100;
+        
+        return outputTorque > (torque + percentOfTorque);
+    }
+    
+    public ArrayList GetKCWormbox4POptions(double kwInput, double rpm, double torque)
+    {
+        ArrayList<String> options = new ArrayList();
+
+        try
+        {
+            
+            Class.forName(driver).newInstance();
+            try (Connection sqlCon = DriverManager.getConnection(url))
+            {
+                java.sql.Statement st = sqlCon.createStatement();
+                String selectOptions = String.format("SELECT Size, Ratio, KWInput,RPM FROM KCWORMBOX4P WHERE KWInput >= %.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput,RPM", kwInput, rpm, torque);
+                                
+                ResultSet res = st.executeQuery(selectOptions);
+                
+                while (res.next())
+                {
+                    int motorSize = res.getInt("Size");
+                    double gearboxRatio = res.getDouble("Ratio");
+                    double KW = res.getDouble("KWInput");
+                    
+                    // this checks if the ratio is a whole number, if so we can display to 0dp
+                    if ((gearboxRatio % 1) == 0)
+                    {                    
+                        options.add(String.format("%.2fKw 4P Motor \nSize: %d Ratio: %.0f", KW, motorSize, gearboxRatio));
+                    }
+                    else
+                    {
+                        options.add(String.format("%.2fKw 4P Motor \nSize: %d Ratio: %.1f", KW, motorSize, gearboxRatio));                        
+                    }
                 }
             }
             
@@ -227,7 +276,7 @@ public class GearboxService
         return options;
     }
     
-    public ArrayList GetKCWormbox4P(double kwInput, double rpm, double torque)
+    public ArrayList GetKCWormbox6POptions(double kwInput, double rpm, double torque)
     {
         ArrayList<String> options = new ArrayList();
 
@@ -238,7 +287,7 @@ public class GearboxService
             try (Connection sqlCon = DriverManager.getConnection(url))
             {
                 java.sql.Statement st = sqlCon.createStatement();
-                String selectOptions = String.format("SELECT Size, Ratio, KWInput FROM KCWORMBOX4P WHERE KWInput >= %.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput", kwInput, rpm, torque);
+                String selectOptions = String.format("SELECT Size, Ratio, KWInput, RPM FROM KCWORMBOX6P WHERE KWInput >= %.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput,RPM", kwInput, rpm, torque);
                                 
                 ResultSet res = st.executeQuery(selectOptions);
                 
@@ -248,40 +297,15 @@ public class GearboxService
                     double gearboxRatio = res.getDouble("Ratio");
                     double KW = res.getDouble("KWInput");
                     
-                    options.add(String.format("%.2fKw 4P Motor \n%d %.1f", KW, motorSize, gearboxRatio));
-                }
-            }
-            
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e)
-        {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error!", JOptionPane.INFORMATION_MESSAGE);
-        }
-
-        return options;
-    }
-    
-    public ArrayList GetKCWormbox6P(double kwInput, double rpm, double torque)
-    {
-        ArrayList<String> options = new ArrayList();
-
-        try
-        {
-            
-            Class.forName(driver).newInstance();
-            try (Connection sqlCon = DriverManager.getConnection(url))
-            {
-                java.sql.Statement st = sqlCon.createStatement();
-                String selectOptions = String.format("SELECT Size, Ratio, KWInput FROM KCWORMBOX6P WHERE KWInput >= %.2f and RPM >= %.1f and Torque >= %.2f ORDER BY KWInput", kwInput, rpm, torque);
-                                
-                ResultSet res = st.executeQuery(selectOptions);
-                
-                while (res.next())
-                {
-                    int motorSize = res.getInt("Size");
-                    double gearboxRatio = res.getDouble("Ratio");
-                    double KW = res.getDouble("KWInput");
-                    
-                    options.add(String.format("%.2fKw 6P Motor \n%d %.1f", KW, motorSize, gearboxRatio));
+                    // this checks if the ratio is a whole number, if so we can display to 0dp
+                    if ((gearboxRatio % 1) == 0)
+                    {                      
+                        options.add(String.format("%.2fKw 6P Motor \nSize: %d Ratio: %.0f", KW, motorSize, gearboxRatio));
+                    }
+                    else
+                    {
+                        options.add(String.format("%.2fKw 6P Motor \nSize: %d Ratio: %.1f", KW, motorSize, gearboxRatio));                        
+                    }
                 }
             }
             
@@ -305,7 +329,7 @@ public class GearboxService
     
     private void CreateWormboxTable()
     {
-         try
+        try
         {
             Class.forName(driver).newInstance();
             Connection sqlCon = DriverManager.getConnection(url);
@@ -316,6 +340,15 @@ public class GearboxService
                 // this is just a check to see if the table exists
                 // hence getting one record is enough
                 ResultSet results = st.executeQuery("SELECT ID FROM Wormbox WHERE ID=1");
+                
+                if (!results.next())
+                {
+                    // this is pretty much just a fail safe for if the table exists at this stage but
+                    // the records haven't been inserted. This won't be executed if the table doesn't exist
+                    String insertRecords = "CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (null, 'WORMBOX', 'Wormbox.csv', null, null, null,0)";
+                    st.executeUpdate(insertRecords);
+                }
+                
                 sqlCon.close();
             } 
             catch (SQLException e)
@@ -336,7 +369,7 @@ public class GearboxService
 
                 st.executeUpdate(createTable);
 
-                String insertRecords = "CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (null, 'WORMBOX', 'Wormboxids.csv', null, null, null,0)";
+                String insertRecords = "CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (null, 'WORMBOX', 'Wormbox.csv', null, null, null,0)";
                 st.executeUpdate(insertRecords);
             }
             finally
